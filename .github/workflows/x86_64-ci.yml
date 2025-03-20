@@ -15,7 +15,7 @@ on:
       branch:
         description: "Git branch to build"
         required: true
-        default: "main-turboacc"
+        default: "main"
         type: string
       
 permissions:
@@ -101,7 +101,7 @@ jobs:
         working-directory: /home/runner/work/istoreos/istoreos/workdir
         env:
           REPO_URL: "https://github.com/jfy9606/istoreos/"
-          REPO_BRANCH: "main-turboacc"
+          REPO_BRANCH: "main"
         run: |
           df -hT $PWD
           git clone $REPO_URL -b $REPO_BRANCH openwrt
