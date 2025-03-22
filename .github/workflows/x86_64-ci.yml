@@ -153,13 +153,13 @@ jobs:
         uses: actions/upload-artifact@main
         with:
           name: x86_64_firmware
-          path: /home/runner/work/istore/istore/workdir/openwrt/artifact/firmware
+          path: /home/runner/work/istoreos/istoreos/workdir/openwrt/artifact/firmware
           
       - name: Upload Package Artifacts
         uses: actions/upload-artifact@main
         with:
           name: x86_64_packages
-          path: /home/runner/work/istore/istore/workdir/openwrt/artifact/package
+          path: /home/runner/work/istoreos/istoreos/workdir/openwrt/artifact/package
 
       #- name: Upload release asset
       #  if: github.event == 'release'
