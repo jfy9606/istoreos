@@ -39,8 +39,12 @@ endif
 define Package/base-files
   SECTION:=base
   CATEGORY:=Base system
-  DEPENDS:=+netifd +libc +jsonfilter +SIGNED_PACKAGES:usign +SIGNED_PACKAGES:openwrt-keyring +NAND_SUPPORT:ubi-utils +fstools +fwtool \
-	+blkid +mount-utils +e2fsprogs +tune2fs +resize2fs +attr +block-mount
+  DEPENDS:= \
+	+netifd +libc +jsonfilter +SIGNED_PACKAGES:usign +SIGNED_PACKAGES:openwrt-keyring \
+	+NAND_SUPPORT:ubi-utils +fstools +fwtool \
+	+blkid +mount-utils +e2fsprogs +tune2fs +resize2fs +attr +block-mount \
+	+SELINUX:procd-selinux +!SELINUX:procd +USE_SECCOMP:procd-seccomp \
+	+SELINUX:busybox-selinux +!SELINUX:busybox
   TITLE:=Base filesystem for OpenWrt
   URL:=http://openwrt.org/
   VERSION:=$(PKG_RELEASE)~$(lastword $(subst -, ,$(REVISION)))

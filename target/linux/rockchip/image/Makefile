@@ -6,6 +6,7 @@ include $(INCLUDE_DIR)/image.mk
 DEVICE_VARS += UBOOT_DEVICE_NAME
 
 define Build/Compile
+	(cd ../dts/rk3588 && ./check.sh)
 	$(CP) $(LINUX_DIR)/COPYING $(KDIR)/COPYING.linux
 endef
 
@@ -78,6 +79,7 @@ endef
 define Device/Legacy
   KERNEL = kernel-bin
   DEVICE_DTS_DIR := ../dts
+  DEVICE_DTS = $$(SOC)/$$(SOC)-$(lastword $(subst _, ,$(1)))
   IMAGE/sysupgrade.img.gz = boot-common-legacy | boot-script-legacy $$(BOOT_SCRIPT) | pine64-img | gzip | append-metadata
 endef
 

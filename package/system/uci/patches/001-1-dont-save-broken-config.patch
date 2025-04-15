@@ -1,4 +1,4 @@
-From 237d5542986ddb00733e172e638339544058d2d8 Mon Sep 17 00:00:00 2001
+From 4a414611c516313e9421cf47438c866a2ce19c99 Mon Sep 17 00:00:00 2001
 From: Liangbin Lian <jjm2473@gmail.com>
 Date: Thu, 6 Jun 2024 15:42:11 +0800
 Subject: [PATCH] file: don't save broken uci config
@@ -9,7 +9,7 @@ Signed-off-by: Liangbin Lian <jjm2473@gmail.com>
  1 file changed, 23 insertions(+), 9 deletions(-)
 
 diff --git a/file.c b/file.c
-index 93abfae..5c942b8 100644
+index 6840cfc..4e6afa9 100644
 --- a/file.c
 +++ b/file.c
 @@ -607,7 +607,7 @@ static const char *uci_escape(struct uci_context *ctx, const char *str)
@@ -51,15 +51,15 @@ index 93abfae..5c942b8 100644
  		}
  	}
  
-@@ -739,6 +744,7 @@ static void uci_file_commit(struct uci_context *ctx, struct uci_package **packag
+@@ -742,6 +747,7 @@ static void uci_file_commit(struct uci_context *ctx, struct uci_package **packag
  	char *filename = NULL;
  	struct stat statbuf;
  	volatile bool do_rename = false;
 +	volatile bool clean_temp = false;
+ 	const char *confdir;
  	int fd, sz;
  
- 	if (!p->path) {
-@@ -800,14 +806,19 @@ static void uci_file_commit(struct uci_context *ctx, struct uci_package **packag
+@@ -803,14 +809,19 @@ static void uci_file_commit(struct uci_context *ctx, struct uci_package **packag
  	if (!f2)
  		UCI_THROW(ctx, UCI_ERR_IO);
  
@@ -82,7 +82,7 @@ index 93abfae..5c942b8 100644
  	UCI_TRAP_RESTORE(ctx);
  
  done:
-@@ -821,6 +832,9 @@ done:
+@@ -824,6 +835,9 @@ done:
  			UCI_THROW(ctx, UCI_ERR_IO);
  		}
  		free(path);
@@ -93,5 +93,5 @@ index 93abfae..5c942b8 100644
  	if (ctx->err)
  		UCI_THROW(ctx, ctx->err);
 -- 
-2.41.0
+2.46.0
 

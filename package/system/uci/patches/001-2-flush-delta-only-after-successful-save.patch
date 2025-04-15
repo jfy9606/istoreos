@@ -1,4 +1,4 @@
-From 17586039934498210dc0a10bbe5a21cc042cdcd2 Mon Sep 17 00:00:00 2001
+From 9e1d70db1e8a456496ecb8e7e39f2fe7e6f4d3a3 Mon Sep 17 00:00:00 2001
 From: Liangbin Lian <jjm2473@gmail.com>
 Date: Thu, 6 Jun 2024 15:42:46 +0800
 Subject: [PATCH] file: flush delta only after successful save
@@ -9,10 +9,10 @@ Signed-off-by: Liangbin Lian <jjm2473@gmail.com>
  1 file changed, 13 insertions(+), 2 deletions(-)
 
 diff --git a/file.c b/file.c
-index 5c942b8..a6f30fe 100644
+index 4e6afa9..4a93a9d 100644
 --- a/file.c
 +++ b/file.c
-@@ -787,8 +787,8 @@ static void uci_file_commit(struct uci_context *ctx, struct uci_package **packag
+@@ -790,8 +790,8 @@ static void uci_file_commit(struct uci_context *ctx, struct uci_package **packag
  			path = NULL;
  		}
  
@@ -23,7 +23,7 @@ index 5c942b8..a6f30fe 100644
  			goto done;
  	}
  
-@@ -830,6 +830,17 @@ done:
+@@ -833,6 +833,17 @@ done:
  		if (!path || stat(path, &statbuf) || chmod(filename, statbuf.st_mode) || rename(filename, path)) {
  			unlink(filename);
  			UCI_THROW(ctx, UCI_ERR_IO);
@@ -42,5 +42,5 @@ index 5c942b8..a6f30fe 100644
  		free(path);
  	} else if (clean_temp) {
 -- 
-2.41.0
+2.46.0
 
