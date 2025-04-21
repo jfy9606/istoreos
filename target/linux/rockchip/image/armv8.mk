@@ -62,6 +62,9 @@ define Device/friendlyarm_nanopi-r2s
   DEVICE_MODEL := NanoPi R2S
   SOC := rk3328
   DEVICE_PACKAGES := kmod-usb-net-rtl8152
+  DEVICE_DTS_DIR := ../dts
+  DEVICE_DTS = rk3328/rk3328-nanopi-r2s
+  KERNEL = kernel-bin | lzma | fit lzma $$(KDIR)/image-rk3328-nanopi-r2s.dtb
 endef
 TARGET_DEVICES += friendlyarm_nanopi-r2s
 
@@ -81,6 +84,18 @@ define Device/friendlyarm_nanopi-r4s
   DEVICE_PACKAGES := kmod-r8169
 endef
 TARGET_DEVICES += friendlyarm_nanopi-r4s
+
+define Device/friendlyarm_nanopi-r4se
+  DEVICE_VENDOR := FriendlyARM
+  DEVICE_MODEL := NanoPi R4SE
+  DEVICE_VARIANT := 4GB LPDDR4
+  SOC := rk3399
+  DEVICE_PACKAGES := kmod-r8169
+  DEVICE_DTS_DIR := ../dts
+  DEVICE_DTS = rk3399/rk3399-nanopi-r4se
+  KERNEL = kernel-bin | lzma | fit lzma $$(KDIR)/image-rk3399-nanopi-r4se.dtb
+endef
+TARGET_DEVICES += friendlyarm_nanopi-r4se
 
 define Device/friendlyarm_nanopi-r4s-enterprise
   DEVICE_VENDOR := FriendlyARM

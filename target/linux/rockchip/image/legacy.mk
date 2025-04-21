@@ -23,6 +23,15 @@ $(call Device/Legacy/rk3568,$(1))
 endef
 TARGET_DEVICES += easepi_r1
 
+define Device/easepi_r1-lite
+$(call Device/Legacy/rk3568,$(1))
+  DEVICE_VENDOR := EasePi
+  DEVICE_MODEL := R1 (4xGbE)
+  DEVICE_DTS := rk3568/rk3568-easepi-r1-lite
+  DEVICE_PACKAGES += kmod-r8169 kmod-nvme
+endef
+TARGET_DEVICES += easepi_r1-lite
+
 define Device/easepi_ars4
 $(call Device/Legacy/rk3568,$(1))
   DEVICE_VENDOR := EasePi
@@ -42,6 +51,13 @@ $(call Device/Legacy/rk3568,$(1))
   DEVICE_PACKAGES += kmod-r8169
 endef
 TARGET_DEVICES += fastrhino_r6xs
+
+define Device/friendlyarm_nanopi-r3s
+$(call Device/Legacy/rk3566,$(1))
+  DEVICE_VENDOR := FriendlyARM
+  DEVICE_MODEL := NanoPi R3S
+  DEVICE_PACKAGES += kmod-r8169
+endef
 
 define Device/friendlyarm_nanopi-r5c
 $(call Device/Legacy/rk3568,$(1))
@@ -116,3 +132,14 @@ $(call Device/Legacy/rk3588s,$(1))
   DEVICE_MODEL := NanoPi R6C
   DEVICE_PACKAGES += kmod-r8169
 endef
+
+define Device/hinlink_h88k
+$(call Device/Legacy/rk3588,$(1))
+  DEVICE_VENDOR := HINLINK
+  DEVICE_MODEL := H88K
+  SUPPORTED_DEVICES += hinlink,h88k-v2 hinlink,h88k-v3 hinlink,h88k
+  DEVICE_DTS := rk3588/rk3588-h88k-v2 rk3588/rk3588-h88k-v3
+  BOOT_SCRIPT := rk3588-hinlink
+  DEVICE_PACKAGES += kmod-r8169 kmod-nvme
+endef
+TARGET_DEVICES += hinlink_h88k

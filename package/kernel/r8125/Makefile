@@ -25,6 +25,20 @@ define KernelPackage/r8125
   VARIANT:=regular
 endef
 
+define KernelPackage/r8125/install/dkml
+	$(INSTALL_DIR) $(1)/etc/modules-pending.d
+	$(LN) ../modules.d/$(filter-out 0-,$(word 1,$(AUTOLOAD))-)$$(NAME) $(1)/etc/modules-pending.d/$$(NAME)
+endef
+
+ifeq ($(CONFIG_TARGET_x86),y)
+KernelPackage/r8125/install = $(KernelPackage/r8125/install/dkml)
+endif
+
+define Package/kmod-r8125/postinst
+#!/bin/sh
+[ -n "$${IPKG_INSTROOT}" ] || rm -f /etc/modules-pending.d/$(NAME)
+endef
+
 define KernelPackage/r8125-rss
 $(call KernelPackage/r8125)
   CONFLICTS:=kmod-r8125

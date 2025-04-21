@@ -20,7 +20,7 @@ kernel_type=c
 rootfs_type=83
 sect=63
 
-set $(ptgen -o $OUTPUT -h $head -s $sect -l $align -t $kernel_type -p ${BOOTFSSIZE}M -t $rootfs_type -p ${ROOTFSSIZE}M -p ${USERDATASIZE}M) ${SIGNATURE:+-S 0x$SIGNATURE})
+set $(ptgen -o $OUTPUT -h $head -s $sect -l $align -t $kernel_type -p ${BOOTFSSIZE}M -t $rootfs_type -p ${ROOTFSSIZE}M -p ${USERDATASIZE}M ${SIGNATURE:+-S 0x$SIGNATURE})
 
 BOOTOFFSET="$(($1 / 512))"
 ROOTFSOFFSET="$(($3 / 512))"

@@ -136,6 +136,13 @@ define U-Boot/nanopi-r4s-rk3399
     friendlyarm_nanopi-r4s-enterprise
 endef
 
+define U-Boot/nanopi-r4se-rk3399
+  $(U-Boot/rk3399/Default)
+  NAME:=NanoPi R4SE
+  BUILD_DEVICES:= \
+	friendlyarm_nanopi-r4se
+endef
+
 define U-Boot/rock-pi-4-rk3399
   $(U-Boot/rk3399/Default)
   NAME:=Rock Pi 4
@@ -201,6 +208,12 @@ endef
 define U-Boot/easepi-rk3568
   $(U-Boot/rk3568/Default)
   NAME:=Easepi RK3568
+  DEFAULT:=y
+endef
+
+define U-Boot/easepi-rk3568-rk809
+  $(U-Boot/rk3568/Default)
+  NAME:=Easepi RK3568 with RK809
   DEFAULT:=y
 endef
 
@@ -312,6 +325,7 @@ endef
 UBOOT_TARGETS := \
   nanopc-t4-rk3399 \
   nanopi-r4s-rk3399 \
+  nanopi-r4se-rk3399 \
   rock-pi-4-rk3399 \
   rockpro64-rk3399 \
   rock-pi-s-rk3308 \
@@ -329,6 +343,7 @@ UBOOT_TARGETS := \
   radxa-zero-3-rk3566 \
   rock-3c-rk3566 \
   easepi-rk3568 \
+  easepi-rk3568-rk809 \
   bpi-r2-pro-rk3568 \
   nanopi-r5c-rk3568 \
   nanopi-r5s-rk3568 \

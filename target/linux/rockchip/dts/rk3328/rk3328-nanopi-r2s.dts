@@ -1,0 +1,7 @@
+/dts-v1/;
+#include <rockchip/rk3328-nanopi-r2s.dts>
+
+&rtl8211e {
+	/delete-property/ reg; 
+	compatible = "ethernet-phy-ieee802.3-c22";
+};

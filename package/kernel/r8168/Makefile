@@ -24,6 +24,20 @@ define KernelPackage/r8168
   PROVIDES:=kmod-r8169
 endef
 
+define KernelPackage/r8168/install/dkml
+	$(INSTALL_DIR) $(1)/etc/modules-pending.d
+	$(LN) ../modules.d/$(filter-out 0-,$(word 1,$(AUTOLOAD))-)$$(NAME) $(1)/etc/modules-pending.d/$$(NAME)
+endef
+
+ifeq ($(CONFIG_TARGET_x86),y)
+KernelPackage/r8168/install = $(KernelPackage/r8168/install/dkml)
+endif
+
+define Package/kmod-r8168/postinst
+#!/bin/sh
+[ -n "$${IPKG_INSTROOT}" ] || rm -f /etc/modules-pending.d/$(NAME)
+endef
+
 define Build/Compile
 	+$(KERNEL_MAKE) $(PKG_JOBS) \
 		M="$(PKG_BUILD_DIR)/src" \
