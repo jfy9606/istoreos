@@ -51,15 +51,20 @@ platform_do_upgrade() {
 	sync
 
 	if [ "$UPGRADE_OPT_SAVE_PARTITIONS" = "1" -o -n "$UPGRADE_BACKUP" ]; then
-		get_partitions "/dev/$diskdev" bootdisk
+		[ -n "$UPGRADE_BACKUP" ] || get_partitions "/dev/$diskdev" bootdisk
 
 		#extract the boot sector from the image
 		get_image "$@" | dd of=/tmp/image.bs count=1 bs=512b
 
 		get_partitions /tmp/image.bs image
 
-		#compare tables
-		diff="$(grep -F -x -v -f /tmp/partmap.bootdisk /tmp/partmap.image)"
+		if [ -n "$UPGRADE_BACKUP" ]; then
+			#keep overlay partition when upgrade
+			diff=
+		else
+			#compare tables
+			diff="$(grep -F -x -v -f /tmp/partmap.bootdisk /tmp/partmap.image)"
+		fi
 	else
 		diff=1
 	fi
@@ -124,16 +129,6 @@ platform_copy_config() {
 
 		tar -C / -zxvf "$UPGRADE_BACKUP" boot/cmdline.txt boot/config.txt
 		bcm27xx_set_root_part
-
-		local backup_tmp="/tmp/backup-update"
-		mkdir -p $backup_tmp
-		tar -C $backup_tmp -zxvf $UPGRADE_BACKUP
-		cp -af /boot/cmdline.txt $backup_tmp/boot/
-
-		local work_dir=$(pwd)
-		cd $backup_tmp
-		tar -C $backup_tmp -zcvf /boot/$BACKUP_FILE *
-		cd $work_dir
 
 		sync
 		umount /boot
