@@ -29,7 +29,7 @@ uci -q batch <<-EOF >/dev/null
 
 	delete kmods.x86_others
 	set kmods.x86_others=auto_unload
-	set kmods.x86_others.function="atlantic bnx2x i40e ixgbe mlx5_core mlx4_core mpt3sas sfc sfc_falcon"
+	set kmods.x86_others.function="atlantic bnx2x i40e ixgbe mlx5_core mlx4_core mpt3sas qlcnic sfc sfc_falcon"
 
 	commit kmods
 EOF
