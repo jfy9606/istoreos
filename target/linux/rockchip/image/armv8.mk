@@ -59,7 +59,7 @@ TARGET_DEVICES += friendlyarm_nanopi-r2c-plus
 
 define Device/friendlyarm_nanopi-r2s
   DEVICE_VENDOR := FriendlyARM
-  DEVICE_MODEL := NanoPi R2S
+  DEVICE_MODEL := NanoPi R2S/R2C
   SOC := rk3328
   DEVICE_PACKAGES := kmod-usb-net-rtl8152
   DEVICE_DTS_DIR := ../dts

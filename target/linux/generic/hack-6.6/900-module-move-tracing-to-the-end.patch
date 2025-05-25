@@ -1,4 +1,4 @@
-From e80bb0701dbd56d2a31f3edd79bc3c019e9ca2eb Mon Sep 17 00:00:00 2001
+From b1106f22d268bb30a4b3f405b2c0fdcbe5427a1a Mon Sep 17 00:00:00 2001
 From: jjm2473 <jjm2473@gmail.com>
 Date: Thu, 16 Jan 2025 18:12:37 +0800
 Subject: [PATCH] header: linux/module.h: move trace and bpf to the end of
@@ -6,15 +6,15 @@ Subject: [PATCH] header: linux/module.h: move trace and bpf to the end of
 
 linux/sched.h: move tracing to the end of struct
 ---
- include/linux/module.h | 68 ++++++++++++++++++++++--------------------
- include/linux/sched.h  | 24 +++++++--------
- 2 files changed, 48 insertions(+), 44 deletions(-)
+ include/linux/module.h | 73 ++++++++++++++++++++++--------------------
+ include/linux/sched.h  | 24 +++++++-------
+ 2 files changed, 51 insertions(+), 46 deletions(-)
 
 diff --git a/include/linux/module.h b/include/linux/module.h
-index 66362f8c8..1f3b09759 100644
+index 66362f8c8..77c1cd423 100644
 --- a/include/linux/module.h
 +++ b/include/linux/module.h
-@@ -486,22 +486,34 @@ struct module {
+@@ -486,26 +486,39 @@ struct module {
  	void *noinstr_text_start;
  	unsigned int noinstr_text_size;
  
@@ -29,14 +29,21 @@ index 66362f8c8..1f3b09759 100644
 -#ifdef CONFIG_BPF_EVENTS
 -	unsigned int num_bpf_raw_events;
 -	struct bpf_raw_event_map *bpf_raw_events;
+-#endif
+-#ifdef CONFIG_DEBUG_INFO_BTF_MODULES
+-	unsigned int btf_data_size;
+-	void *btf_data;
+-#endif
++
+ #ifdef CONFIG_JUMP_LABEL
+ 	struct jump_entry *jump_entries;
+ 	unsigned int num_jump_entries;
+ #endif
 +
 +#ifdef CONFIG_HAVE_STATIC_CALL_INLINE
 +	int num_static_call_sites;
 +	struct static_call_site *static_call_sites;
- #endif
--#ifdef CONFIG_DEBUG_INFO_BTF_MODULES
--	unsigned int btf_data_size;
--	void *btf_data;
++#endif
 +
 +#ifdef CONFIG_MODULE_UNLOAD
 +	/* What modules depend on me? */
@@ -48,7 +55,7 @@ index 66362f8c8..1f3b09759 100644
 +	void (*exit)(void);
 +
 +	atomic_t refcnt;
- #endif
++#endif
 +
 +#ifdef CONFIG_CONSTRUCTORS
 +	/* Constructor functions. */
@@ -56,10 +63,10 @@ index 66362f8c8..1f3b09759 100644
 +	unsigned int num_ctors;
 +#endif
 +
- #ifdef CONFIG_JUMP_LABEL
- 	struct jump_entry *jump_entries;
- 	unsigned int num_jump_entries;
-@@ -526,10 +538,7 @@ struct module {
+ #ifdef CONFIG_TRACING
+ 	unsigned int num_trace_bprintk_fmt;
+ 	const char **trace_bprintk_fmt_start;
+@@ -526,10 +539,7 @@ struct module {
  	unsigned long *kprobe_blacklist;
  	unsigned int num_kprobe_blacklist;
  #endif
@@ -71,7 +78,7 @@ index 66362f8c8..1f3b09759 100644
  #if IS_ENABLED(CONFIG_KUNIT)
  	int num_kunit_suites;
  	struct kunit_suite **kunit_suites;
-@@ -549,24 +558,6 @@ struct module {
+@@ -549,24 +559,6 @@ struct module {
  	struct pi_entry **printk_index_start;
  #endif
  
@@ -96,7 +103,7 @@ index 66362f8c8..1f3b09759 100644
  #ifdef CONFIG_FUNCTION_ERROR_INJECTION
  	struct error_injection_entry *ei_funcs;
  	unsigned int num_ei_funcs;
-@@ -575,6 +566,19 @@ struct module {
+@@ -575,6 +567,19 @@ struct module {
  	struct _ddebug_info dyndbg_info;
  #endif
  
@@ -120,7 +127,7 @@ diff --git a/include/linux/sched.h b/include/linux/sched.h
 index 4809f27b5..10a58fdd2 100644
 --- a/include/linux/sched.h
 +++ b/include/linux/sched.h
-@@ -1406,11 +1406,6 @@ struct task_struct {
+@@ -1407,11 +1407,6 @@ struct task_struct {
  	atomic_t			tracing_graph_pause;
  #endif
  
@@ -132,7 +139,7 @@ index 4809f27b5..10a58fdd2 100644
  #ifdef CONFIG_KCOV
  	/* See kernel/kcov.c for more details. */
  
-@@ -1510,13 +1505,6 @@ struct task_struct {
+@@ -1511,13 +1506,6 @@ struct task_struct {
  	int				mce_count;
  #endif
  
@@ -146,7 +153,7 @@ index 4809f27b5..10a58fdd2 100644
  #ifdef CONFIG_ARCH_HAS_PARANOID_L1D_FLUSH
  	/*
  	 * If L1D flush is supported on mm context switch
-@@ -1541,6 +1529,18 @@ struct task_struct {
+@@ -1542,6 +1530,18 @@ struct task_struct {
  	struct user_event_mm		*user_event_mm;
  #endif
  

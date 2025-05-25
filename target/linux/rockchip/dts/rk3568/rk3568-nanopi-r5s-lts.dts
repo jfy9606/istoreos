@@ -9,7 +9,6 @@
 
 / {
 	model = "FriendlyElec NanoPi R5S LTS";
-	compatible = "friendlyelec,nanopi-r5s", "rockchip,rk3568";
 };
 
 &pcie3x2 {

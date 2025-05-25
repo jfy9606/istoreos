@@ -187,11 +187,11 @@
 		vin-supply = <&vcc5v0_sys>;
 	};
 
-	vcc3v3_wf: vcc3v3-wf-regulator {
+	vcc3v3_pcie2x1l0: vcc3v3-pcie2x1l0-regulator {
 		compatible = "regulator-fixed";
 		enable-active-high;
 		gpios = <&gpio2 RK_PC5 GPIO_ACTIVE_HIGH>;
-		regulator-name = "vcc3v3_wf";
+		regulator-name = "vcc3v3_pcie2x1l0";
 		regulator-min-microvolt = <3300000>;
 		regulator-max-microvolt = <3300000>;
 		startup-delay-us = <50000>;
@@ -219,7 +219,7 @@
 		vin-supply = <&vcc5v0_sys>;
 	};
 
-	vbus5v0_typec: vbus-typec-regulator {
+	vbus5v0_typec: vbus5v0-typec-regulator {
 		compatible = "regulator-fixed";
 		enable-active-high;
 		gpio = <&gpio4 RK_PB0 GPIO_ACTIVE_HIGH>;
@@ -228,6 +228,7 @@
 		regulator-name = "vbus5v0_typec";
 		regulator-min-microvolt = <5000000>;
 		regulator-max-microvolt = <5000000>;
+		startup-delay-us = <5000>;
 		vin-supply = <&vcc5v0_sys>;
 	};
 };
@@ -366,9 +367,9 @@
 			data-role = "dual";
 			label = "USB-C";
 			power-role = "dual";
-			op-sink-microwatt = <10>;
-			source-pdos = <PDO_FIXED(5000, 1400, PDO_FIXED_USB_COMM)>;
-			sink-pdos = <PDO_FIXED(5000, 10, PDO_FIXED_USB_COMM)>;
+			op-sink-microwatt = <1000000>;
+			source-pdos = <PDO_FIXED(5000, 3000, PDO_FIXED_USB_COMM)>;
+			sink-pdos = <PDO_FIXED(5000, 1000, PDO_FIXED_USB_COMM)>;
 			try-power-role = "source";
 
 			ports {
@@ -377,7 +378,6 @@
 
 				port@0 {
 					reg = <0>;
-
 					usbc0_hs: endpoint {
 						remote-endpoint = <&usb_host0_xhci_drd_sw>;
 					};
@@ -385,7 +385,6 @@
 
 				port@1 {
 					reg = <1>;
-
 					usbc0_ss: endpoint {
 						remote-endpoint = <&usbdp_phy0_typec_ss>;
 					};
@@ -393,7 +392,6 @@
 
 				port@2 {
 					reg = <2>;
-
 					usbc0_sbu: endpoint {
 						remote-endpoint = <&usbdp_phy0_typec_sbu>;
 					};
@@ -464,7 +462,7 @@
 /* phy1 - M.KEY socket */
 &pcie2x1l0 {
 	reset-gpios = <&gpio4 RK_PA5 GPIO_ACTIVE_HIGH>;
-	vpcie3v3-supply = <&vcc3v3_wf>;
+	vpcie3v3-supply = <&vcc3v3_pcie2x1l0>;
 	status = "okay";
 };
 
@@ -970,7 +968,26 @@
 };
 
 &usbdp_phy0 {
+	//mode-switch;
+	orientation-switch;
+	sbu1-dc-gpios = <&gpio4 RK_PA6 GPIO_ACTIVE_HIGH>;
+	sbu2-dc-gpios = <&gpio4 RK_PA7 GPIO_ACTIVE_HIGH>;
 	status = "okay";
+
+	port {
+		#address-cells = <1>;
+		#size-cells = <0>;
+
+		usbdp_phy0_typec_ss: endpoint@0 {
+			reg = <0>;
+			remote-endpoint = <&usbc0_ss>;
+		};
+
+		usbdp_phy0_typec_sbu: endpoint@1 {
+			reg = <1>;
+			remote-endpoint = <&usbc0_sbu>;
+		};
+	};
 };
 
 &usbdp_phy1 {
@@ -986,7 +1003,8 @@
 };
 
 &usb_host0_xhci {
-	usb-role-switch;
+	//usb-role-switch;
+	dr_mode = "host";
 	status = "okay";
 
 	port {
@@ -1009,24 +1027,12 @@
 	status = "okay";
 };
 
-&usbdp_phy0 {
-	mode-switch;
-	orientation-switch;
-	sbu1-dc-gpios = <&gpio4 RK_PA6 GPIO_ACTIVE_HIGH>;
-	sbu2-dc-gpios = <&gpio4 RK_PA7 GPIO_ACTIVE_HIGH>;
+&rknpu {
+    rknpu-supply = <&vdd_npu_s0>;
+    mem-supply = <&vdd_npu_mem_s0>;
+    status = "okay";
+};
 
-	port {
-		#address-cells = <1>;
-		#size-cells = <0>;
-
-		usbdp_phy0_typec_ss: endpoint@0 {
-			reg = <0>;
-			remote-endpoint = <&usbc0_ss>;
-		};
-
-		usbdp_phy0_typec_sbu: endpoint@1 {
-			reg = <1>;
-			remote-endpoint = <&usbc0_sbu>;
-		};
-	};
+&rknpu_mmu {
+    status = "okay";
 };
