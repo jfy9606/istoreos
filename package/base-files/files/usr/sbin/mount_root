@@ -140,6 +140,17 @@ clean_overlayfs_origin() {
 	cd - >/dev/null 2>&1
 }
 
+clean_overlayfs_redundant_opaque() {
+	local line
+	cd "$1"
+	getfattr -R -P -h --match='trusted.overlay.opaque' . 2>/dev/null | grep '^# file: ' | cut -c9- | while read; do
+		line="$REPLY"
+		[ -z "$line" -o -d "/$line" ] && continue
+		setfattr -x "trusted.overlay.opaque" -h "$line" 2>/dev/null
+	done
+	cd - >/dev/null 2>&1
+}
+
 clean_overlayfs_redundant_whiteout_marker()
 {
 	local line
@@ -204,8 +215,7 @@ clean_pkg_content() {
 }
 
 pkg_depends_rec() {
-	local overlay="$1"
-	local pkgname="$2"
+	local pkgname="$1"
 	local line
 	local dep
 	local deps
@@ -214,13 +224,27 @@ pkg_depends_rec() {
 
 	if [ -f /usr/lib/opkg/info/${pkgname}.control -a ! -f /tmp/reset_core_packages/${pkgname} ]; then
 		deps=`grep '^Depends: ' /usr/lib/opkg/info/${pkgname}.control | sed -e 's/^Depends: //' -e 's/ ([^)]*)//g' -e 's/,/ /g'`
-		# avoid loop deps
-		rm -f $overlay/upper/usr/lib/opkg/info/${pkgname}.control
 		touch /tmp/reset_core_packages/${pkgname}
 		for dep in $deps ; do
-			pkg_depends_rec "$overlay" "$dep"
+			pkg_depends_rec "$dep"
 		done
 	fi
+}
+
+list_core_packages()
+{
+	local pkg
+	mkdir -p /tmp/reset_core_packages
+	for pkg in \
+		luci-compat luci-lua-runtime luci-lib-base luci-base uhttpd luci-ssl-openssl \
+		rpcd procd \
+		netifd dnsmasq-full dnsmasq firewall4 \
+		block-mount \
+		curl \
+		ttyd dropbear kernel
+	do
+		pkg_depends_rec $pkg
+	done
 }
 
 reset_core_packages()
@@ -229,24 +253,12 @@ reset_core_packages()
 	local running_ver=$(grep 'DISTRIB_RELEASE=' /etc/openwrt_release 2>/dev/null | sed -E "s/.*='(.+)'.*/\1/")
 	[ "v$(cat "$overlay/.upgrading" 2>/dev/null)" = "v$running_ver" ] && return
 	local pkg
-	rm -rf /tmp/reset_core_packages
-	mkdir -p /tmp/reset_core_packages
-	for pkg in \
-		luci-compat luci-lua-runtime luci-lib-base luci-base uhttpd \
-		rpcd procd \
-		netifd dnsmasq-full dnsmasq firewall4 \
-		block-mount \
-		curl \
-		ttyd kernel
-	do
-		pkg_depends_rec "$overlay" $pkg
-	done
-	log "Reset packages in $overlay: `ls /tmp/reset_core_packages/ | xargs echo`"
+	[ -d /tmp/reset_core_packages ] || list_core_packages
+	echo "Reset packages in $overlay: `ls /tmp/reset_core_packages/ | xargs echo`" | dd bs=960 2>/dev/null
 	ls /tmp/reset_core_packages/ | while read; do
 		pkg="$REPLY"
 		clean_pkg_content "$overlay" $pkg
 	done
-	rm -rf /tmp/reset_core_packages
 }
 
 clean_kmods()
@@ -274,7 +286,7 @@ clean_kmods()
 			rm -f /tmp/safe_kmods.txt
 
 			if [ -s /tmp/del_kmods.txt ]; then
-				log "Clean kmods in $1: `cat /tmp/del_kmods.txt | xargs echo`"
+				echo "Clean kmods in $1: `cat /tmp/del_kmods.txt | xargs echo`" | dd bs=960 2>/dev/null
 
 				cat /tmp/del_kmods.txt | sed 's/$/.list/' | xargs cat | sed "s#^/#$1/upper/#" | xargs -r rm -f
 				cat /tmp/del_kmods.txt | xargs -rn1 sh -c 'rm -f $0.list $0.prerm $0.postinst'
@@ -299,25 +311,34 @@ prepare_primary_overlay()
 		rm -rf /overlay/upper /overlay/work
 		rm -f /overlay/.reset
 		sync /overlay
-	else
-		if [ -d /overlay/upper ] ; then
-			if update_overlay_lower_uuid /overlay || [ -f /overlay/.upgrading ] ; then
-				clean_os_version_files /overlay
-				reset_core_packages /overlay
-				is_overlayfs_use_xattr && clean_overlayfs_origin /overlay/upper
-				clean_overlayfs_redundant_whiteout_marker /overlay
-			else
-				clean_overlayfs_redundant_whiteout_marker_luci /overlay
+	fi
+}
+
+prepare_primary_overlay_after_merge()
+{
+	if [ -d /overlay/upper ]; then
+		if update_overlay_lower_uuid /overlay || [ -f /overlay/.upgrading ] ; then
+			clean_os_version_files /overlay
+			reset_core_packages /overlay
+			touch /overlay/.upgrading
+		fi
+		if [ -f /overlay/.upgrading -o -f /overlay/.merged ] ; then
+			if is_overlayfs_use_xattr ; then
+				clean_overlayfs_origin /overlay/upper
+				clean_overlayfs_redundant_opaque /overlay/upper
 			fi
+			clean_overlayfs_redundant_whiteout_marker /overlay
 		else
-			update_overlay_lower_uuid /overlay
+			clean_overlayfs_redundant_whiteout_marker_luci /overlay
 		fi
-		if [ -f /overlay/upper/usr/lib/opkg/.upgrading ]; then
-			clean_kmods /overlay
-		fi
+	else
+		update_overlay_lower_uuid /overlay
+	fi
+	if [ -f /overlay/upper/usr/lib/opkg/.upgrading ]; then
+		clean_kmods /overlay
 	fi
 
-	rm -f /overlay/.upgrading
+	rm -f /overlay/.upgrading /overlay/.merged
 
 	mkdir -p /overlay/upper /overlay/work
 }
@@ -371,7 +392,20 @@ prepare_ext_overlay()
 	if [ -f "$newoverlaydir/.reset" ]; then
 		rm -rf "$newoverlaydir/upper"
 		rm -f "$newoverlaydir/.commit" "$newoverlaydir/.reset"
+	elif [ -f "$newoverlaydir/.commit" ]; then
+		if [ -d "$newoverlaydir/upper" ]; then
+			apply_overlayfs_opaque "$newoverlaydir" "$overlaydir"
+		fi
+		cp -a "$newoverlaydir/upper/." "$overlaydir/upper" && {
+			touch "$overlaydir/.merged"
+			rmdir "$overlaydir/upper/ext_overlay"
+			rm -rf "$newoverlaydir/upper"
+			mkdir -m 0755 -p "$newoverlaydir/upper/ext_overlay"
+		}
+		rm -f "$newoverlaydir/.commit"
 	else
+		prepare_primary_overlay_after_merge
+		touch "$overlaydir/.clean"
 		if [ -f "$newoverlaydir/upper/usr/lib/opkg/.upgrading" ]; then
 			clean_kmods "$newoverlaydir"
 		fi
@@ -380,18 +414,7 @@ prepare_ext_overlay()
 			reset_core_packages "$newoverlaydir"
 			is_overlayfs_use_xattr && clean_overlayfs_origin "$newoverlaydir/upper"
 		fi
-		if [ -f "$newoverlaydir/.commit" ]; then
-			if [ -d "$newoverlaydir/upper" ]; then
-				apply_overlayfs_opaque "$newoverlaydir" "$overlaydir"
-			fi
-			cp -a "$newoverlaydir/upper/." "$overlaydir/upper" && {
-				rmdir "$overlaydir/upper/ext_overlay"
-				clean_overlayfs_redundant_whiteout_marker "$overlaydir"
-				rm -rf "$newoverlaydir/upper"
-				mkdir -m 0755 -p "$newoverlaydir/upper/ext_overlay"
-			}
-			rm -f "$newoverlaydir/.commit"
-		elif [ -d "$newoverlaydir/upper" -a \( -f "$newoverlaydir/upper/usr/lib/opkg/.upgrading" -o ! -f "$overlaydir/.sandbox" \) ]; then
+		if [ -d "$newoverlaydir/upper" -a \( -f "$newoverlaydir/upper/usr/lib/opkg/.upgrading" -o ! -f "$overlaydir/.sandbox" \) ]; then
 			clean_overlayfs_redundant_whiteout_marker "$newoverlaydir" "$overlaydir"
 		else
 			clean_overlayfs_redundant_whiteout_marker_luci "$newoverlaydir" "$overlaydir"
@@ -408,8 +431,11 @@ prepare_ext_overlay()
 
 prepare_mnt()
 {
-	local dir
+	rm -rf /tmp/reset_core_packages
+	prepare_primary_overlay
+
 	if mount_extroot && mountpoint -q /tmp/extroot/mnt; then
+		local dir
 		for dir in proc dev tmp sys overlay rom root; do
 			mkdir -m 0755 /tmp/extroot/mnt/$dir
 		done
@@ -436,6 +462,13 @@ prepare_mnt()
 			umount /tmp/extroot/overlay
 		fi
 	fi
+	if [ -f /overlay/.clean ]; then
+		rm -f /overlay/.clean
+	else
+		prepare_primary_overlay_after_merge
+	fi
+
+	rm -rf /tmp/reset_core_packages
 
 	mount -o noatime,lowerdir=$lowerdir,upperdir=$overlaydir/upper,workdir=$overlaydir/work \
 		-t overlay "overlayfs:/overlay" /mnt \
@@ -482,8 +515,6 @@ do_mount_overlayfs()
 		rm -f /rom/note >/dev/null 2>&1
 		return 0
 	fi
-
-	inlog prepare_primary_overlay
 
 	inlog prepare_mnt || return 1
 

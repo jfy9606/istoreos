@@ -3,6 +3,14 @@
 
 / {
 	model = "FriendlyElec NanoPi R2S/R2C";
+
+	fan: pwm-fan {
+		compatible = "pwm-fan";
+		cooling-levels = <0 18 102 170 255>;
+		#cooling-cells = <2>;
+		fan-supply = <&vdd_5v>;
+		pwms = <&pwm2 0 50000 0>;
+	};
 };
 
 &rtl8211e {
@@ -12,4 +20,29 @@
 	motorcomm,clk-out-frequency-hz = <125000000>;
 	motorcomm,keep-pll-enabled;
 	motorcomm,auto-sleep-disabled;
+};
+
+&soc_thermal {
+	trips {
+		cpu_warm: cpu_warm {
+			temperature = <50000>;
+			hysteresis = <5000>;
+			type = "active";
+		};
+		cpu_hot: cpu_hot {
+			temperature = <60000>;
+			hysteresis = <3000>;
+			type = "active";
+		};
+	};
+	cooling-maps {
+		map-pwm-fan-l0 {
+			trip = <&cpu_warm>;
+			cooling-device = <&fan THERMAL_NO_LIMIT 1>;
+		};
+		map-pwm-fan-l1 {
+			trip = <&cpu_hot>;
+			cooling-device = <&fan 2 THERMAL_NO_LIMIT>;
+		};
+	};
 };
