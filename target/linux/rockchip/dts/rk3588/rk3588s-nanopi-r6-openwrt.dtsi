@@ -5,3 +5,7 @@
 	/* Reset time is 15ms, 50ms for rtl8211f */
 	snps,reset-delays-us = <0 20000 100000>;
 };
+
+&sdmmc {
+	cd-gpios = <&gpio0 RK_PA4 GPIO_ACTIVE_LOW>;
+};

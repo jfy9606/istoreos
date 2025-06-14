@@ -12,8 +12,8 @@
 
 	aliases {
 		ethernet0 = &gmac1;
-		mmc0 = &sdmmc;
-		mmc1 = &sdhci;
+		mmc0 = &sdhci;
+		mmc1 = &sdmmc;
 	};
 
 	chosen {
@@ -71,10 +71,11 @@
 
 &sdhci {
 	bus-width = <8>;
-	no-sdio;
-	no-sd;
-	non-removable;
+	cap-mmc-highspeed;
 	mmc-hs200-1_8v;
+	no-sd;
+	no-sdio;
+	non-removable;
 	status = "okay";
 };
 
@@ -82,10 +83,8 @@
 	bus-width = <4>;
 	cap-sd-highspeed;
 	disable-wp;
-	max-frequency = <150000000>;
 	no-mmc;
 	no-sdio;
-	sd-uhs-sdr104;
 	status = "okay";
 };
 
