@@ -1,3 +1,26 @@
+# RK3528
+
+define Device/Legacy/rk3528
+$(call Device/Legacy,$(1))
+  SOC := rk3528
+  UBOOT_DEVICE_NAME := easepi-rk3528
+  BOOT_SCRIPT := rk3528
+  DEVICE_PACKAGES := kmod-rga3 kmod-rk_vcodec
+endef
+
+define Device/Legacy/rk3528_rtl8111h
+$(call Device/Legacy/rk3528,$(1))
+  DEVICE_PACKAGES += kmod-r8168 kmod-thermal
+endef
+
+define Device/radxa_e20c
+$(call Device/Legacy/rk3528_rtl8111h,$(1))
+  DEVICE_VENDOR := Radxa
+  DEVICE_MODEL := E20C
+endef
+TARGET_DEVICES += radxa_e20c
+
+
 # RK3568
 
 define Device/Legacy/rk3568
