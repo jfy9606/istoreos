@@ -1,3 +1,10 @@
+/ {
+	aliases {
+		mmc0 = &sdmmc;
+		mmc1 = &sdio;
+		mmc2 = &sdhci;
+	};
+};
 
 &gmac1 {
 	snps,reset-gpio = <&gpio3 RK_PB7 GPIO_ACTIVE_LOW>;

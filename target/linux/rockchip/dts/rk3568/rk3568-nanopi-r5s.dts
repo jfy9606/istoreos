@@ -5,6 +5,12 @@
 #include "rk3568-ip-rk809.dtsi"
 
 / {
+	aliases {
+		mmc0 = &sdmmc0;
+		mmc1 = &sdmmc1;
+		mmc2 = &sdhci;
+		mmc3 = &sdmmc2;
+	};
 	fan: pwm-fan {
 		compatible = "pwm-fan";
 		cooling-levels = <0 18 102 170 255>;
