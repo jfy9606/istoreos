@@ -12,11 +12,9 @@ Signed-off-by: David Wu <david.wu@rock-chips.com>
  drivers/net/ethernet/stmicro/stmmac/stmmac_mdio.c | 3 +++
  1 file changed, 3 insertions(+)
 
-diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_mdio.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_mdio.c
-index 0542cfd18..ec1ddc583 100644
 --- a/drivers/net/ethernet/stmicro/stmmac/stmmac_mdio.c
 +++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_mdio.c
-@@ -481,6 +481,9 @@ int stmmac_mdio_reset(struct mii_bus *bus)
+@@ -481,6 +481,9 @@ int stmmac_mdio_reset(struct mii_bus *bu
  		gpiod_set_value_cansleep(reset_gpio, 0);
  		if (delays[2])
  			msleep(DIV_ROUND_UP(delays[2], 1000));
@@ -26,6 +24,3 @@ index 0542cfd18..ec1ddc583 100644
  	}
  #endif
  
--- 
-2.46.0
-

@@ -14,11 +14,9 @@ Change-Id: I66ff92dce1711e3d189801c8caa3219217a50dda
  drivers/ata/ahci_dwc.c | 14 ++++++++++++++
  1 file changed, 14 insertions(+)
 
-diff --git a/drivers/ata/ahci_dwc.c b/drivers/ata/ahci_dwc.c
-index ed263de3f..ee87baa6b 100644
 --- a/drivers/ata/ahci_dwc.c
 +++ b/drivers/ata/ahci_dwc.c
-@@ -155,6 +155,12 @@ static int ahci_bt1_init(struct ahci_host_priv *hpriv)
+@@ -155,6 +155,12 @@ static int ahci_bt1_init(struct ahci_hos
  	return 0;
  }
  
@@ -31,7 +29,7 @@ index ed263de3f..ee87baa6b 100644
  static struct ahci_host_priv *ahci_dwc_get_resources(struct platform_device *pdev)
  {
  	struct ahci_dwc_host_priv *dpriv;
-@@ -468,10 +474,18 @@ static struct ahci_dwc_plat_data ahci_bt1_plat = {
+@@ -468,10 +474,18 @@ static struct ahci_dwc_plat_data ahci_bt
  	.init = ahci_bt1_init,
  };
  
@@ -50,6 +48,3 @@ index ed263de3f..ee87baa6b 100644
  	{},
  };
  MODULE_DEVICE_TABLE(of, ahci_dwc_of_match);
--- 
-2.46.0
-

@@ -10,8 +10,6 @@ Change-Id: Ic7cbb95b83cef361ea4d62c969d5585318ec0dac
  drivers/iommu/rockchip-iommu.c | 7 ++++++-
  2 files changed, 9 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/iommu/Makefile b/drivers/iommu/Makefile
-index 769e43d78..435d8b572 100644
 --- a/drivers/iommu/Makefile
 +++ b/drivers/iommu/Makefile
 @@ -18,7 +18,9 @@ obj-$(CONFIG_MTK_IOMMU) += mtk_iommu.o
@@ -25,11 +23,9 @@ index 769e43d78..435d8b572 100644
  obj-$(CONFIG_SUN50I_IOMMU) += sun50i-iommu.o
  obj-$(CONFIG_TEGRA_IOMMU_GART) += tegra-gart.o
  obj-$(CONFIG_TEGRA_IOMMU_SMMU) += tegra-smmu.o
-diff --git a/drivers/iommu/rockchip-iommu.c b/drivers/iommu/rockchip-iommu.c
-index 71fe9dc6f..73a72cd15 100644
 --- a/drivers/iommu/rockchip-iommu.c
 +++ b/drivers/iommu/rockchip-iommu.c
-@@ -1378,7 +1378,9 @@ static int rk_iommu_probe(struct platform_device *pdev)
+@@ -1378,7 +1378,9 @@ static int rk_iommu_probe(struct platfor
  		return -EINVAL;
  
  	if (device_property_match_string(dev, "compatible", "rockchip,iommu-av1d") >= 0) {
@@ -40,7 +36,7 @@ index 71fe9dc6f..73a72cd15 100644
  		goto alloc_group;
  	}
  
-@@ -1574,6 +1576,9 @@ static const struct of_device_id rk_iommu_dt_ids[] = {
+@@ -1574,6 +1576,9 @@ static const struct of_device_id rk_iomm
  	{	.compatible = "rockchip,rk3568-iommu",
  		.data = &iommu_data_ops_v2,
  	},
@@ -50,6 +46,3 @@ index 71fe9dc6f..73a72cd15 100644
  	{ /* sentinel */ }
  };
  
--- 
-2.46.0
-

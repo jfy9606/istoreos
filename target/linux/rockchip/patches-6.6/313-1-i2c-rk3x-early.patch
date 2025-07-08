@@ -7,11 +7,9 @@ Subject: [PATCH] drivers/i2c-rk3x: initcall early
  drivers/i2c/busses/i2c-rk3x.c | 12 +++++++++++-
  1 file changed, 11 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/i2c/busses/i2c-rk3x.c b/drivers/i2c/busses/i2c-rk3x.c
-index 086fdf262..8f4bed0b5 100644
 --- a/drivers/i2c/busses/i2c-rk3x.c
 +++ b/drivers/i2c/busses/i2c-rk3x.c
-@@ -1408,7 +1408,17 @@ static struct platform_driver rk3x_i2c_driver = {
+@@ -1408,7 +1408,17 @@ static struct platform_driver rk3x_i2c_d
  	},
  };
  
@@ -30,6 +28,3 @@ index 086fdf262..8f4bed0b5 100644
  
  MODULE_DESCRIPTION("Rockchip RK3xxx I2C Bus driver");
  MODULE_AUTHOR("Max Schwarz <max.schwarz@online.de>");
--- 
-2.46.0
-

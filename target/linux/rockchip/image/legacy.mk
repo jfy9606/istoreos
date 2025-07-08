@@ -10,7 +10,7 @@ endef
 
 define Device/Legacy/rk3528_rtl8111h
 $(call Device/Legacy/rk3528,$(1))
-  DEVICE_PACKAGES += kmod-r8168 kmod-thermal
+  DEVICE_PACKAGES += kmod-r8169 kmod-thermal
 endef
 
 define Device/radxa_e20c

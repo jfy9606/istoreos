@@ -10,11 +10,9 @@ Fixes: ("ethernet: stmmac: Release reset gpio desc for mdio reset")
  drivers/net/ethernet/stmicro/stmmac/stmmac_mdio.c | 3 ++-
  1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_mdio.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_mdio.c
-index ec1ddc583..0bc77b18c 100644
 --- a/drivers/net/ethernet/stmicro/stmmac/stmmac_mdio.c
 +++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_mdio.c
-@@ -483,7 +483,8 @@ int stmmac_mdio_reset(struct mii_bus *bus)
+@@ -483,7 +483,8 @@ int stmmac_mdio_reset(struct mii_bus *bu
  			msleep(DIV_ROUND_UP(delays[2], 1000));
  
  		/* put reset gpio resource for next time */
@@ -24,6 +22,3 @@ index ec1ddc583..0bc77b18c 100644
  	}
  #endif
  
--- 
-2.46.0
-

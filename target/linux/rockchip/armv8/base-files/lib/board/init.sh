@@ -53,9 +53,12 @@ set_iface_cpumask() {
 	local seconds
 	local mq
 	local q
-	local queue_mask=$(( 0x${PROC_MASK} ^ 0x${core_mask} ))
-	queue_mask="$(printf %x "$queue_mask")"
+	local queue_mask="$4"
 	local mq_mask="$4"
+	if [[ -z "$queue_mask" ]]; then
+		queue_mask=$(( 0x${PROC_MASK} ^ 0x${core_mask} ))
+		queue_mask="$(printf %x "$queue_mask")"
+	fi
 
 	[[ -d "/sys/class/net/${interface}" ]] || return 1
 
@@ -72,7 +75,7 @@ set_iface_cpumask() {
 			echo "${core_mask}" > /proc/irq/${irq}/smp_affinity
 			if [[ -z "${mq}" ]]; then
 				echo "${queue_mask}" > /sys/class/net/$interface/queues/rx-0/rps_cpus
-				echo "${queue_mask}" > /sys/class/net/$interface/queues/tx-0/xps_cpus
+				# echo "${queue_mask}" > /sys/class/net/$interface/queues/tx-0/xps_cpus
 			elif [[ "${device}" = "${interface}-0" ]]; then
 				[[ -n "$mq_mask" ]] || mq_mask="${queue_mask}"
 				for q in /sys/class/net/$interface/queues/rx-*; do
@@ -230,17 +233,17 @@ board_set_iface_smp_affinity() {
 	sinovoip,rk3568-bpi-r2pro|\
 	friendlyarm,nanopi-r5s|friendlyelec,nanopi-r5s|\
 	friendlyelec,nanopi-r5s-c1)
-		set_iface_cpumask 2 eth0
+		set_iface_cpumask 3 eth0 "" c
 		if ethtool -i eth1 | grep -Fq 'driver: r8169'; then
-			set_iface_cpumask 4 "eth1"
-			set_iface_cpumask 8 "eth2"
+			set_iface_cpumask 2 "eth1"
+			set_iface_cpumask 1 "eth2"
 		else
-			set_iface_cpumask 4 "eth1" "eth1-0" && \
-			set_iface_cpumask 4 "eth1" "eth1-16" && \
-			set_iface_cpumask 2 "eth1" "eth1-18"
-			set_iface_cpumask 8 "eth2" "eth2-0" && \
-			set_iface_cpumask 8 "eth2" "eth2-18" && \
-			set_iface_cpumask 1 "eth2" "eth2-16"
+			set_iface_cpumask 2 "eth1" "eth1-0" && \
+			set_iface_cpumask 2 "eth1" "eth1-16" && \
+			set_iface_cpumask 4 "eth1" "eth1-18"
+			set_iface_cpumask 1 "eth2" "eth2-0" && \
+			set_iface_cpumask 1 "eth2" "eth2-18" && \
+			set_iface_cpumask 8 "eth2" "eth2-16"
 		fi
 		;;
 	easepi,r1|easepi,r1-lite|\
@@ -249,18 +252,18 @@ board_set_iface_smp_affinity() {
 	lyt,t68m|\
 	fastrhino,r68s|lunzn,fastrhino-r68s|\
 	hinlink,opc-h68k)
-		set_iface_cpumask 1 "eth0"
-		set_iface_cpumask 2 "eth1"
+		set_iface_cpumask 3 "eth0" "" c
+		set_iface_cpumask 3 "eth1" "" c
 		if ethtool -i eth2 | grep -Fq 'driver: r8169'; then
-			set_iface_cpumask 4 "eth2"
-			set_iface_cpumask 8 "eth3"
+			set_iface_cpumask 2 "eth2"
+			set_iface_cpumask 1 "eth3"
 		else
-			set_iface_cpumask 4 "eth2" "eth2-0" && \
-			set_iface_cpumask 4 "eth2" "eth2-16" && \
-			set_iface_cpumask 2 "eth2" "eth2-18"
-			set_iface_cpumask 8 "eth3" "eth3-0" && \
-			set_iface_cpumask 8 "eth3" "eth3-18" && \
-			set_iface_cpumask 1 "eth3" "eth3-16"
+			set_iface_cpumask 2 "eth2" "eth2-0" && \
+			set_iface_cpumask 2 "eth2" "eth2-16" && \
+			set_iface_cpumask 4 "eth2" "eth2-18"
+			set_iface_cpumask 1 "eth3" "eth3-0" && \
+			set_iface_cpumask 1 "eth3" "eth3-18" && \
+			set_iface_cpumask 8 "eth3" "eth3-16"
 		fi
 		;;
 	jsy,h1|\
@@ -368,10 +371,10 @@ board_set_iface_smp_affinity() {
 	radxa,e20c|\
 	mangopi,m28k|\
 	hlink,h28k)
-		set_iface_cpumask 5 eth0
+		set_iface_cpumask 2 eth0 "" 9
 		# eth1 is rtl8111h, driven by r8169 or r8168
 		if ethtool -i eth1 | grep -Fq 'driver: r8169'; then
-			set_iface_cpumask b eth1
+			set_iface_cpumask 4 eth1 "" 4
 		else
 			set_iface_cpumask 5 eth1 eth1-0 a
 		fi

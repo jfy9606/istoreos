@@ -7,11 +7,9 @@ Subject: [PATCH] drivers/rk8xx-i2c: initcall early
  drivers/mfd/rk8xx-i2c.c | 13 ++++++++++++-
  1 file changed, 12 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/mfd/rk8xx-i2c.c b/drivers/mfd/rk8xx-i2c.c
-index 1a98feea9..d5cd1623c 100644
 --- a/drivers/mfd/rk8xx-i2c.c
 +++ b/drivers/mfd/rk8xx-i2c.c
-@@ -176,7 +176,18 @@ static struct i2c_driver rk8xx_i2c_driver = {
+@@ -176,7 +176,18 @@ static struct i2c_driver rk8xx_i2c_drive
  	.probe = rk8xx_i2c_probe,
  	.shutdown  = rk8xx_i2c_shutdown,
  };
@@ -31,6 +29,3 @@ index 1a98feea9..d5cd1623c 100644
  
  MODULE_LICENSE("GPL");
  MODULE_AUTHOR("Chris Zhong <zyw@rock-chips.com>");
--- 
-2.46.0
-

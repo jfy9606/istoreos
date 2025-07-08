@@ -9,24 +9,16 @@ Subject: [PATCH] net: phy: realtek: add LED configuration from OF for 8211f
 
 --- a/drivers/net/phy/realtek/realtek_main.c
 +++ b/drivers/net/phy/realtek/realtek_main.c
-@@ -13,6 +13,7 @@
- #include <linux/module.h>
- #include <linux/delay.h>
- #include <linux/clk.h>
-+#include <linux/of.h>
+@@ -87,6 +87,8 @@
+ #define RTL8211F_LEDCR_MASK			GENMASK(4, 0)
+ #define RTL8211F_LEDCR_SHIFT			5
  
- #include "realtek.h"
++#define RTL8211F_EEELEDCR                          0x11
++
+ /* RTL8211F RGMII configuration */
+ #define RTL8211F_RGMII_PAGE			0xd08
  
-@@ -30,6 +31,8 @@
- #define RTL821x_EXT_PAGE_SELECT			0x1e
- #define RTL821x_PAGE_SELECT			0x1f
- 
-+#define RTL8211F_LCR				0x10
-+#define RTL8211F_EEELCR				0x11
- #define RTL8211F_PHYCR1				0x18
- #define RTL8211F_PHYCR2				0x19
- #define RTL8211F_INSR				0x1d
-@@ -377,11 +380,25 @@ static int rtl8211c_config_init(struct p
+@@ -514,11 +516,25 @@ static int rtl8211c_config_init(struct p
  			    CTL1000_ENABLE_MASTER | CTL1000_AS_MASTER);
  }
  
@@ -34,11 +26,11 @@ Subject: [PATCH] net: phy: realtek: add LED configuration from OF for 8211f
 +{
 +	int oldpage;
 +	/*switch to extension page 0xd04*/
-+	oldpage = phy_select_page(phydev, 0x0d04);
++	oldpage = phy_select_page(phydev, RTL8211F_LEDCR_PAGE);
 +
 +	if (oldpage >= 0) {
-+		__phy_write(phydev, RTL8211F_LCR, val);
-+		__phy_write(phydev, RTL8211F_EEELCR, 0x0);
++		__phy_write(phydev, RTL8211F_LEDCR, val);
++		__phy_write(phydev, RTL8211F_EEELEDCR, 0x0);
 +	}
 +	phy_restore_page(phydev, oldpage, 0);
 +}
@@ -51,8 +43,8 @@ Subject: [PATCH] net: phy: realtek: add LED configuration from OF for 8211f
 +	u32 led_data;
  	int ret;
  
- 	ret = phy_modify_paged_changed(phydev, 0xa43, RTL8211F_PHYCR1,
-@@ -393,6 +410,9 @@ static int rtl8211f_config_init(struct p
+ 	ret = phy_modify_paged_changed(phydev, RTL8211F_PHYCR_PAGE, RTL8211F_PHYCR1,
+@@ -530,6 +546,9 @@ static int rtl8211f_config_init(struct p
  		return ret;
  	}
  

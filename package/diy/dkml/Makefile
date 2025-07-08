@@ -1,8 +1,8 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=dkml
-PKG_VERSION:=1.0.7
-PKG_RELEASE:=1
+PKG_VERSION:=1.0.8
+PKG_RELEASE:=2
 PKG_FLAGS:=hold essential nonshared
 
 PKG_MAINTAINER:=jjm2473 <jjm2473@gmail.com>

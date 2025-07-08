@@ -10,11 +10,9 @@ linux/sched.h: move tracing to the end of struct
  include/linux/sched.h  | 24 +++++++-------
  2 files changed, 51 insertions(+), 46 deletions(-)
 
-diff --git a/include/linux/module.h b/include/linux/module.h
-index 66362f8c8..77c1cd423 100644
 --- a/include/linux/module.h
 +++ b/include/linux/module.h
-@@ -486,26 +486,39 @@ struct module {
+@@ -488,26 +488,39 @@ struct module {
  	void *noinstr_text_start;
  	unsigned int noinstr_text_size;
  
@@ -66,7 +64,7 @@ index 66362f8c8..77c1cd423 100644
  #ifdef CONFIG_TRACING
  	unsigned int num_trace_bprintk_fmt;
  	const char **trace_bprintk_fmt_start;
-@@ -526,10 +539,7 @@ struct module {
+@@ -528,10 +541,7 @@ struct module {
  	unsigned long *kprobe_blacklist;
  	unsigned int num_kprobe_blacklist;
  #endif
@@ -78,7 +76,7 @@ index 66362f8c8..77c1cd423 100644
  #if IS_ENABLED(CONFIG_KUNIT)
  	int num_kunit_suites;
  	struct kunit_suite **kunit_suites;
-@@ -549,24 +559,6 @@ struct module {
+@@ -551,29 +561,11 @@ struct module {
  	struct pi_entry **printk_index_start;
  #endif
  
@@ -94,6 +92,11 @@ index 66362f8c8..77c1cd423 100644
 -	atomic_t refcnt;
 -#endif
 -
+ #ifdef CONFIG_MITIGATION_ITS
+ 	int its_num_pages;
+ 	void **its_page_array;
+ #endif
+ 
 -#ifdef CONFIG_CONSTRUCTORS
 -	/* Constructor functions. */
 -	ctor_fn_t *ctors;
@@ -103,7 +106,7 @@ index 66362f8c8..77c1cd423 100644
  #ifdef CONFIG_FUNCTION_ERROR_INJECTION
  	struct error_injection_entry *ei_funcs;
  	unsigned int num_ei_funcs;
-@@ -575,6 +567,19 @@ struct module {
+@@ -582,6 +574,19 @@ struct module {
  	struct _ddebug_info dyndbg_info;
  #endif
  
@@ -123,8 +126,6 @@ index 66362f8c8..77c1cd423 100644
  #ifdef CONFIG_KALLSYMS
  	/* Protected by RCU and/or module_mutex: use rcu_dereference() */
  	struct mod_kallsyms __rcu *kallsyms;
-diff --git a/include/linux/sched.h b/include/linux/sched.h
-index 4809f27b5..10a58fdd2 100644
 --- a/include/linux/sched.h
 +++ b/include/linux/sched.h
 @@ -1407,11 +1407,6 @@ struct task_struct {
@@ -172,6 +173,3 @@ index 4809f27b5..10a58fdd2 100644
  	/*
  	 * New fields for task_struct should be added above here, so that
  	 * they are included in the randomized portion of task_struct.
--- 
-2.46.0
-

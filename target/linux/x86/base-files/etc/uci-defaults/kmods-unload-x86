@@ -13,15 +13,6 @@ uci -q batch <<-EOF >/dev/null
 	set kmods.radeon=auto_unload
 	set kmods.radeon.function=radeon
 
-	delete kmods.mwifiex
-	set kmods.mwifiex=auto_unload
-	set kmods.mwifiex.function=mwifiex_pcie
-	set kmods.mwifiex.support=mwifiex
-	delete kmods.ath10k
-	set kmods.ath10k=auto_unload
-	set kmods.ath10k.function=ath10k_pci
-	set kmods.ath10k.support=ath10k_core
-
 	delete kmods.qed
 	set kmods.qed=auto_unload
 	set kmods.qed.function="qede qedf"

@@ -9,8 +9,6 @@ Subject: [PATCH] rockchip-iommu: export APIs
  2 files changed, 148 insertions(+)
  create mode 100644 include/soc/rockchip/rockchip_iommu.h
 
-diff --git a/drivers/iommu/rockchip-iommu.c b/drivers/iommu/rockchip-iommu.c
-index 8ff69fbf9..1068a5b47 100644
 --- a/drivers/iommu/rockchip-iommu.c
 +++ b/drivers/iommu/rockchip-iommu.c
 @@ -114,6 +114,7 @@ struct rk_iommu {
@@ -21,14 +19,14 @@ index 8ff69fbf9..1068a5b47 100644
  };
  
  struct rk_iommudata {
-@@ -916,8 +917,24 @@ static void rk_iommu_disable(struct rk_iommu *iommu)
+@@ -916,7 +917,23 @@ static void rk_iommu_disable(struct rk_i
  	}
  	rk_iommu_disable_stall(iommu);
  	clk_bulk_disable(iommu->num_clocks, iommu->clocks);
 +
 +	iommu->iommu_enabled = false;
- }
- 
++}
++
 +int rockchip_iommu_disable(struct device *dev)
 +{
 +	struct rk_iommu *iommu;
@@ -40,13 +38,12 @@ index 8ff69fbf9..1068a5b47 100644
 +	rk_iommu_disable(iommu);
 +
 +	return 0;
-+}
+ }
 +EXPORT_SYMBOL(rockchip_iommu_disable);
-+
+ 
  /* Must be called with iommu powered on and attached */
  static int rk_iommu_enable(struct rk_iommu *iommu)
- {
-@@ -950,9 +967,59 @@ static int rk_iommu_enable(struct rk_iommu *iommu)
+@@ -950,9 +967,59 @@ out_disable_stall:
  	rk_iommu_disable_stall(iommu);
  out_disable_clocks:
  	clk_bulk_disable(iommu->num_clocks, iommu->clocks);
@@ -106,7 +103,7 @@ index 8ff69fbf9..1068a5b47 100644
  static int rk_iommu_identity_attach(struct iommu_domain *identity_domain,
  				    struct device *dev)
  {
-@@ -1185,6 +1252,37 @@ static int rk_iommu_of_xlate(struct device *dev,
+@@ -1185,6 +1252,37 @@ static int rk_iommu_of_xlate(struct devi
  	return 0;
  }
  
@@ -144,9 +141,6 @@ index 8ff69fbf9..1068a5b47 100644
  static const struct iommu_ops rk_iommu_ops = {
  	.domain_alloc = rk_iommu_domain_alloc,
  	.probe_device = rk_iommu_probe_device,
-diff --git a/include/soc/rockchip/rockchip_iommu.h b/include/soc/rockchip/rockchip_iommu.h
-new file mode 100644
-index 000000000..3b0b21240
 --- /dev/null
 +++ b/include/soc/rockchip/rockchip_iommu.h
 @@ -0,0 +1,50 @@
@@ -200,6 +194,3 @@ index 000000000..3b0b21240
 +#endif
 +
 +#endif
--- 
-2.46.0
-

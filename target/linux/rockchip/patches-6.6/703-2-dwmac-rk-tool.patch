@@ -9,8 +9,6 @@ Subject: [PATCH] drivers/dwmac-rk: supports rockchip dwmac tool
  .../net/ethernet/stmicro/stmmac/dwmac-rk.c    | 46 +++++++++++++++++++
  3 files changed, 59 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/net/ethernet/stmicro/stmmac/Kconfig b/drivers/net/ethernet/stmicro/stmmac/Kconfig
-index 92d7d5a00..43e5de1fa 100644
 --- a/drivers/net/ethernet/stmicro/stmmac/Kconfig
 +++ b/drivers/net/ethernet/stmicro/stmmac/Kconfig
 @@ -142,6 +142,16 @@ config DWMAC_ROCKCHIP
@@ -30,11 +28,9 @@ index 92d7d5a00..43e5de1fa 100644
  config DWMAC_SOCFPGA
  	tristate "SOCFPGA dwmac support"
  	default ARCH_INTEL_SOCFPGA
-diff --git a/drivers/net/ethernet/stmicro/stmmac/Makefile b/drivers/net/ethernet/stmicro/stmmac/Makefile
-index 5b57aee19..f0305f28b 100644
 --- a/drivers/net/ethernet/stmicro/stmmac/Makefile
 +++ b/drivers/net/ethernet/stmicro/stmmac/Makefile
-@@ -20,7 +20,9 @@ obj-$(CONFIG_DWMAC_LPC18XX)	+= dwmac-lpc18xx.o
+@@ -20,7 +20,9 @@ obj-$(CONFIG_DWMAC_LPC18XX)	+= dwmac-lpc
  obj-$(CONFIG_DWMAC_MEDIATEK)	+= dwmac-mediatek.o
  obj-$(CONFIG_DWMAC_MESON)	+= dwmac-meson.o dwmac-meson8b.o
  obj-$(CONFIG_DWMAC_QCOM_ETHQOS)	+= dwmac-qcom-ethqos.o
@@ -45,8 +41,6 @@ index 5b57aee19..f0305f28b 100644
  obj-$(CONFIG_DWMAC_SOCFPGA)	+= dwmac-altr-socfpga.o
  obj-$(CONFIG_DWMAC_STARFIVE)	+= dwmac-starfive.o
  obj-$(CONFIG_DWMAC_STI)		+= dwmac-sti.o
-diff --git a/drivers/net/ethernet/stmicro/stmmac/dwmac-rk.c b/drivers/net/ethernet/stmicro/stmmac/dwmac-rk.c
-index 5890b969b..ae7e711bf 100644
 --- a/drivers/net/ethernet/stmicro/stmmac/dwmac-rk.c
 +++ b/drivers/net/ethernet/stmicro/stmmac/dwmac-rk.c
 @@ -25,6 +25,10 @@
@@ -60,7 +54,7 @@ index 5890b969b..ae7e711bf 100644
  struct rk_priv_data;
  struct rk_gmac_ops {
  	void (*set_to_rgmii)(struct rk_priv_data *bsp_priv,
-@@ -1807,6 +1811,39 @@ static void rk_fix_speed(void *priv, unsigned int speed, unsigned int mode)
+@@ -1938,6 +1942,39 @@ static void rk_fix_speed(void *priv, uns
  	}
  }
  
@@ -100,7 +94,7 @@ index 5890b969b..ae7e711bf 100644
  static int rk_gmac_probe(struct platform_device *pdev)
  {
  	struct plat_stmmacenet_data *plat_dat;
-@@ -1853,6 +1890,12 @@ static int rk_gmac_probe(struct platform_device *pdev)
+@@ -1984,6 +2021,12 @@ static int rk_gmac_probe(struct platform
  	if (ret)
  		goto err_gmac_powerdown;
  
@@ -113,7 +107,7 @@ index 5890b969b..ae7e711bf 100644
  	return 0;
  
  err_gmac_powerdown:
-@@ -1870,6 +1913,9 @@ static void rk_gmac_remove(struct platform_device *pdev)
+@@ -2001,6 +2044,9 @@ static void rk_gmac_remove(struct platfo
  	stmmac_dvr_remove(&pdev->dev);
  
  	rk_gmac_powerdown(bsp_priv);
@@ -123,6 +117,3 @@ index 5890b969b..ae7e711bf 100644
  	if (bsp_priv->phy_reset)
  		reset_control_put(bsp_priv->phy_reset);
  }
--- 
-2.46.0
-

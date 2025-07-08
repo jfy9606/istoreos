@@ -8,8 +8,6 @@ rework Ventoy boot
  init/initramfs.c | 12 ++++--------
  1 file changed, 4 insertions(+), 8 deletions(-)
 
-diff --git a/init/initramfs.c b/init/initramfs.c
-index 148988bd8..84980e6a2 100644
 --- a/init/initramfs.c
 +++ b/init/initramfs.c
 @@ -361,10 +361,8 @@ static int __init do_name(void)
@@ -38,6 +36,3 @@ index 148988bd8..84980e6a2 100644
  	}
  	collected[N_ALIGN(name_len) + body_len] = '\0';
  	clean_path(collected, 0);
--- 
-2.46.0
-

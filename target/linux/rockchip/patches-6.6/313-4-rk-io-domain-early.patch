@@ -7,11 +7,9 @@ Subject: [PATCH] drivers/rockchip/io-domain: initcall early
  drivers/soc/rockchip/io-domain.c | 12 +++++++++++-
  1 file changed, 11 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/soc/rockchip/io-domain.c b/drivers/soc/rockchip/io-domain.c
-index f58d19df5..0cd986682 100644
 --- a/drivers/soc/rockchip/io-domain.c
 +++ b/drivers/soc/rockchip/io-domain.c
-@@ -752,7 +752,17 @@ static struct platform_driver rockchip_iodomain_driver = {
+@@ -752,7 +752,17 @@ static struct platform_driver rockchip_i
  	},
  };
  
@@ -30,6 +28,3 @@ index f58d19df5..0cd986682 100644
  
  MODULE_DESCRIPTION("Rockchip IO-domain driver");
  MODULE_AUTHOR("Heiko Stuebner <heiko@sntech.de>");
--- 
-2.46.0
-

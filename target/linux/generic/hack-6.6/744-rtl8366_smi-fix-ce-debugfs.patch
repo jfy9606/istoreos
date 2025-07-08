@@ -7,11 +7,9 @@ Subject: [PATCH] rtl8366_smi: fix CE on debugfs enabled
  drivers/net/phy/rtl8366_smi.c | 14 ++------------
  1 file changed, 2 insertions(+), 12 deletions(-)
 
-diff --git a/drivers/net/phy/rtl8366_smi.c b/drivers/net/phy/rtl8366_smi.c
-index a26fd204c..87136341f 100644
 --- a/drivers/net/phy/rtl8366_smi.c
 +++ b/drivers/net/phy/rtl8366_smi.c
-@@ -941,13 +941,8 @@ static void rtl8366_debugfs_init(struct rtl8366_smi *smi)
+@@ -941,13 +941,8 @@ static void rtl8366_debugfs_init(struct
  	}
  	root = smi->debugfs_root;
  
@@ -26,7 +24,7 @@ index a26fd204c..87136341f 100644
  
  	node = debugfs_create_file("val", S_IRUGO | S_IWUSR, root, smi,
  				   &fops_rtl8366_regs);
-@@ -965,13 +960,8 @@ static void rtl8366_debugfs_init(struct rtl8366_smi *smi)
+@@ -965,13 +960,8 @@ static void rtl8366_debugfs_init(struct
  		return;
  	}
  
@@ -41,6 +39,3 @@ index a26fd204c..87136341f 100644
  
  	node = debugfs_create_file("vlan_4k", S_IRUSR, root, smi,
  				   &fops_rtl8366_vlan_4k);
--- 
-2.46.0
-

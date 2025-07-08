@@ -1,5 +1,6 @@
 /dts-v1/;
 #include <rockchip/rk3328-nanopi-r2s.dts>
+#include "rk3328-usb3.dtsi"
 
 / {
 	model = "FriendlyElec NanoPi R2S/R2C";
@@ -45,4 +46,17 @@
 			cooling-device = <&fan 2 THERMAL_NO_LIMIT>;
 		};
 	};
+};
+
+&u3phy {
+	vbus-supply = <&vdd_5v>;
+	status = "okay";
+};
+
+&u3phy_utmi {
+	status = "okay";
+};
+
+&u3phy_pipe {
+	status = "okay";
 };

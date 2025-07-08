@@ -8,8 +8,6 @@ Subject: [PATCH] netdevice.h: move FCOE members to the struct end for better
  include/linux/netdevice.h | 56 ++++++++++++++++++++-------------------
  1 file changed, 29 insertions(+), 27 deletions(-)
 
-diff --git a/include/linux/netdevice.h b/include/linux/netdevice.h
-index 7d3544847..b41187c40 100644
 --- a/include/linux/netdevice.h
 +++ b/include/linux/netdevice.h
 @@ -1527,30 +1527,6 @@ struct net_device_ops {
@@ -96,6 +94,3 @@ index 7d3544847..b41187c40 100644
  };
  #define to_net_dev(d) container_of(d, struct net_device, dev)
  
--- 
-2.46.0
-

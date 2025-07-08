@@ -8,8 +8,6 @@ for better compatible
  include/net/net_namespace.h | 6 +++---
  1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/include/net/net_namespace.h b/include/net/net_namespace.h
-index 958c805df..3233685b6 100644
 --- a/include/net/net_namespace.h
 +++ b/include/net/net_namespace.h
 @@ -178,9 +178,6 @@ struct net {
@@ -32,6 +30,3 @@ index 958c805df..3233685b6 100644
  } __randomize_layout;
  
  #include <linux/seq_file_net.h>
--- 
-2.46.0
-

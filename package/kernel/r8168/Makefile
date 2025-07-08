@@ -2,7 +2,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=r8168
 PKG_VERSION:=8.055.00
-PKG_RELEASE:=1
+PKG_RELEASE:=3
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=https://github.com/openwrt/rtl8168/releases/download/$(PKG_VERSION)
@@ -22,6 +22,7 @@ define KernelPackage/r8168
   FILES:=$(PKG_BUILD_DIR)/src/r8168.ko
   AUTOLOAD:=$(call AutoLoad,35,r8168)
   PROVIDES:=kmod-r8169
+  VARIANT:=regular
 endef
 
 define KernelPackage/r8168/install/dkml
@@ -38,6 +39,19 @@ define Package/kmod-r8168/postinst
 [ -n "$${IPKG_INSTROOT}" ] || rm -f /etc/modules-pending.d/$(NAME)
 endef
 
+define KernelPackage/r8168-rss
+$(call KernelPackage/r8168)
+  CONFLICTS:=kmod-r8168
+  TITLE+= (RSS)
+  VARIANT:=rss
+endef
+
+ifeq ($(BUILD_VARIANT),rss)
+  PKG_MAKE_FLAGS += \
+    ENABLE_MULTIPLE_TX_QUEUE=y \
+    ENABLE_RSS_SUPPORT=y
+endif
+
 define Build/Compile
 	+$(KERNEL_MAKE) $(PKG_JOBS) \
 		M="$(PKG_BUILD_DIR)/src" \
@@ -45,3 +59,4 @@ define Build/Compile
 endef
 
 $(eval $(call KernelPackage,r8168))
+$(eval $(call KernelPackage,r8168-rss))

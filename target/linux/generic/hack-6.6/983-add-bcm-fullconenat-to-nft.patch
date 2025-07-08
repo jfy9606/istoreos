@@ -8,8 +8,6 @@ Subject: [PATCH] netfilter: nft_masq: supports brcm fullcone flag
  net/netfilter/nft_masq.c                 | 11 +++++++++++
  2 files changed, 13 insertions(+)
 
-diff --git a/include/uapi/linux/netfilter/nf_tables.h b/include/uapi/linux/netfilter/nf_tables.h
-index 9c29015d0..d6f6f086a 100644
 --- a/include/uapi/linux/netfilter/nf_tables.h
 +++ b/include/uapi/linux/netfilter/nf_tables.h
 @@ -1477,12 +1477,14 @@ enum nft_tproxy_attributes {
@@ -27,8 +25,6 @@ index 9c29015d0..d6f6f086a 100644
  	__NFTA_MASQ_MAX
  };
  #define NFTA_MASQ_MAX		(__NFTA_MASQ_MAX - 1)
-diff --git a/net/netfilter/nft_masq.c b/net/netfilter/nft_masq.c
-index 8a14aaca9..9c97a990a 100644
 --- a/net/netfilter/nft_masq.c
 +++ b/net/netfilter/nft_masq.c
 @@ -17,6 +17,7 @@ struct nft_masq {
@@ -39,7 +35,7 @@ index 8a14aaca9..9c97a990a 100644
  };
  
  static const struct nla_policy nft_masq_policy[NFTA_MASQ_MAX + 1] = {
-@@ -24,6 +25,7 @@ static const struct nla_policy nft_masq_policy[NFTA_MASQ_MAX + 1] = {
+@@ -24,6 +25,7 @@ static const struct nla_policy nft_masq_
  		NLA_POLICY_MASK(NLA_BE32, NF_NAT_RANGE_MASK),
  	[NFTA_MASQ_REG_PROTO_MIN]	= { .type = NLA_U32 },
  	[NFTA_MASQ_REG_PROTO_MAX]	= { .type = NLA_U32 },
@@ -47,7 +43,7 @@ index 8a14aaca9..9c97a990a 100644
  };
  
  static int nft_masq_validate(const struct nft_ctx *ctx,
-@@ -51,6 +53,9 @@ static int nft_masq_init(const struct nft_ctx *ctx,
+@@ -51,6 +53,9 @@ static int nft_masq_init(const struct nf
  	if (tb[NFTA_MASQ_FLAGS])
  		priv->flags = ntohl(nla_get_be32(tb[NFTA_MASQ_FLAGS]));
  
@@ -57,7 +53,7 @@ index 8a14aaca9..9c97a990a 100644
  	if (tb[NFTA_MASQ_REG_PROTO_MIN]) {
  		err = nft_parse_register_load(tb[NFTA_MASQ_REG_PROTO_MIN],
  					      &priv->sreg_proto_min, plen);
-@@ -80,6 +85,9 @@ static int nft_masq_dump(struct sk_buff *skb,
+@@ -80,6 +85,9 @@ static int nft_masq_dump(struct sk_buff
  	    nla_put_be32(skb, NFTA_MASQ_FLAGS, htonl(priv->flags)))
  		goto nla_put_failure;
  
@@ -67,7 +63,7 @@ index 8a14aaca9..9c97a990a 100644
  	if (priv->sreg_proto_min) {
  		if (nft_dump_register(skb, NFTA_MASQ_REG_PROTO_MIN,
  				      priv->sreg_proto_min) ||
-@@ -112,6 +120,9 @@ static void nft_masq_eval(const struct nft_expr *expr,
+@@ -112,6 +120,9 @@ static void nft_masq_eval(const struct n
  
  	switch (nft_pf(pkt)) {
  	case NFPROTO_IPV4:
@@ -77,6 +73,3 @@ index 8a14aaca9..9c97a990a 100644
  		regs->verdict.code = nf_nat_masquerade_ipv4(pkt->skb,
  							    nft_hook(pkt),
  							    &range,
--- 
-2.46.0
-

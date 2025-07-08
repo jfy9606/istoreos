@@ -7,11 +7,9 @@ Subject: [PATCH] make MODULES_TREE_LOOKUP configurable
  kernel/module/Kconfig | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/kernel/module/Kconfig b/kernel/module/Kconfig
-index dfcb045af..00f89e2ec 100644
 --- a/kernel/module/Kconfig
 +++ b/kernel/module/Kconfig
-@@ -386,7 +386,7 @@ config UNUSED_KSYMS_WHITELIST
+@@ -387,7 +387,7 @@ config UNUSED_KSYMS_WHITELIST
  	  source tree.
  
  config MODULES_TREE_LOOKUP
@@ -20,6 +18,3 @@ index dfcb045af..00f89e2ec 100644
  	depends on PERF_EVENTS || TRACING || CFI_CLANG
  
  config MODULE_STRIPPED
--- 
-2.46.0
-

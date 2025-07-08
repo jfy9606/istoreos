@@ -7,11 +7,9 @@ Subject: [PATCH] drivers/rk808-regulator: initcall early
  drivers/regulator/rk808-regulator.c | 12 +++++++++++-
  1 file changed, 11 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/regulator/rk808-regulator.c b/drivers/regulator/rk808-regulator.c
-index 374d80dc6..ecb1acdd7 100644
 --- a/drivers/regulator/rk808-regulator.c
 +++ b/drivers/regulator/rk808-regulator.c
-@@ -1747,7 +1747,17 @@ static struct platform_driver rk808_regulator_driver = {
+@@ -1747,7 +1747,17 @@ static struct platform_driver rk808_regu
  	},
  };
  
@@ -30,6 +28,3 @@ index 374d80dc6..ecb1acdd7 100644
  
  MODULE_DESCRIPTION("regulator driver for the RK805/RK808/RK818 series PMICs");
  MODULE_AUTHOR("Tony xie <tony.xie@rock-chips.com>");
--- 
-2.46.0
-

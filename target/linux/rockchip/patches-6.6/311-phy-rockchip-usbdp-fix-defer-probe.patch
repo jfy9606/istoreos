@@ -15,11 +15,9 @@ Subject: [PATCH] drivers/phy-rockchip-usbdp: fix -EPROBE_DEFER not propagating
  drivers/phy/rockchip/phy-rockchip-usbdp.c | 3 ++-
  1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/phy/rockchip/phy-rockchip-usbdp.c b/drivers/phy/rockchip/phy-rockchip-usbdp.c
-index 7b6c3cafe..67b659fbc 100644
 --- a/drivers/phy/rockchip/phy-rockchip-usbdp.c
 +++ b/drivers/phy/rockchip/phy-rockchip-usbdp.c
-@@ -426,7 +426,8 @@ static int rk_udphy_clk_init(struct rk_udphy *udphy, struct device *dev)
+@@ -426,7 +426,8 @@ static int rk_udphy_clk_init(struct rk_u
  
  	udphy->num_clks = devm_clk_bulk_get_all(dev, &udphy->clks);
  	if (udphy->num_clks < 1)
@@ -29,6 +27,3 @@ index 7b6c3cafe..67b659fbc 100644
  
  	/* used for configure phy reference clock frequency */
  	for (i = 0; i < udphy->num_clks; i++) {
--- 
-2.46.0
-

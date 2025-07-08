@@ -10,11 +10,9 @@ Signed-off-by: Jon Lin <jon.lin@rock-chips.com>
  drivers/spi/spidev.c | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/drivers/spi/spidev.c b/drivers/spi/spidev.c
-index 232eb60b1..41d041a3a 100644
 --- a/drivers/spi/spidev.c
 +++ b/drivers/spi/spidev.c
-@@ -714,6 +714,7 @@ static const struct spi_device_id spidev_spi_ids[] = {
+@@ -714,6 +714,7 @@ static const struct spi_device_id spidev
  	{ .name = "m53cpld" },
  	{ .name = "spi-petra" },
  	{ .name = "spi-authenta" },
@@ -22,6 +20,3 @@ index 232eb60b1..41d041a3a 100644
  	{ .name = "em3581" },
  	{ .name = "si3210" },
  	{},
--- 
-2.46.0
-
