@@ -391,7 +391,11 @@ board_set_iface_smp_affinity() {
 		;;
 	friendlyarm,nanopi-r2c|\
 	friendlyarm,nanopi-r2c-plus|\
-	friendlyarm,nanopi-r2s|\
+	friendlyarm,nanopi-r2s)
+		set_iface_cpumask 4 "eth0" "" 9
+		set_iface_cpumask 2 "eth1" "xhci-hcd:usb[0-9]+" 8
+		# ethtool -K eth1 tx-scatter-gather-fraglist off
+		;;
 	radxa,cm3-io|\
 	xunlong,orangepi-r1-plus|\
 	xunlong,orangepi-r1-plus-lts)

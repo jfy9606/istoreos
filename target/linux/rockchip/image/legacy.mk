@@ -1,3 +1,28 @@
+# RK3328
+
+define Device/Legacy/rk3328
+$(call Device/Legacy,$(1))
+  SOC := rk3328
+  DEVICE_PACKAGES := kmod-iio-rockchip-saradc
+endef
+
+# avoid using upstream dts
+define Device/friendlyarm_nanopi-r2c
+$(call Device/Legacy/rk3328,$(1))
+  DEVICE_VENDOR := FriendlyARM
+  DEVICE_MODEL := NanoPi R2C | Plus
+  DEVICE_PACKAGES += kmod-usb-net-rtl8152 ethtool
+endef
+
+define Device/friendlyarm_nanopi-r2s
+$(call Device/friendlyarm_nanopi-r2c,$(1))
+  DEVICE_MODEL := NanoPi R2S/R2C | Plus
+  SUPPORTED_DEVICES += friendlyarm,nanopi-r2s friendlyarm,nanopi-r2c
+  DEVICE_DTS := rk3328/rk3328-nanopi-r2s rk3328/rk3328-nanopi-r2c
+  BOOT_SCRIPT := rk3328-friendlyelec
+endef
+
+
 # RK3528
 
 define Device/Legacy/rk3528
@@ -5,7 +30,7 @@ $(call Device/Legacy,$(1))
   SOC := rk3528
   UBOOT_DEVICE_NAME := easepi-rk3528
   BOOT_SCRIPT := rk3528
-  DEVICE_PACKAGES := kmod-rga3 kmod-rk_vcodec
+  DEVICE_PACKAGES := kmod-rga3 kmod-rk_vcodec kmod-iio-rockchip-saradc
 endef
 
 define Device/Legacy/rk3528_rtl8111h
@@ -28,7 +53,7 @@ $(call Device/Legacy,$(1))
   SOC := rk3568
   UBOOT_DEVICE_NAME := easepi-rk3568
   BOOT_SCRIPT := rk3568
-  DEVICE_PACKAGES := kmod-rga3 kmod-rk_vcodec kmod-rkgpu-bifrost kmod-rknpu
+  DEVICE_PACKAGES := kmod-rga3 kmod-rk_vcodec kmod-rkgpu-bifrost kmod-rknpu kmod-iio-rockchip-saradc
 endef
 
 define Device/Legacy/rk3566
@@ -128,7 +153,7 @@ $(call Device/Legacy,$(1))
   SOC := rk3588
   UBOOT_DEVICE_NAME := easepi-rk3588
   BOOT_SCRIPT := rk3588
-  DEVICE_PACKAGES := kmod-rga3 kmod-rk_vcodec kmod-rkgpu-bifrost-csf-coex kmod-rknpu
+  DEVICE_PACKAGES := kmod-rga3 kmod-rk_vcodec kmod-rkgpu-bifrost-csf-coex kmod-rknpu kmod-iio-rockchip-saradc
 endef
 
 define Device/Legacy/rk3588s

@@ -45,4 +45,6 @@
 &usbdrd3 {
 	phys = <&u3phy_utmi>, <&u3phy_pipe>;
 	phy-names = "usb2-phy", "usb3-phy";
+	snps,parkmode-disable-hs-quirk;
+	snps,parkmode-disable-ss-quirk;
 };
