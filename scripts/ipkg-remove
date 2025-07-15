@@ -11,7 +11,7 @@ for pkg in "$@"; do
 		fi
 	done
 	case "$pkg" in
-		*/"${sourcename}"*.ipk)
+		*/"${sourcename}_"*.ipk)
 			rm -vf "$pkg"
 		;;
 	esac

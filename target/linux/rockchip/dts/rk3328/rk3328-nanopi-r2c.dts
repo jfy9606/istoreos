@@ -5,3 +5,9 @@
 / {
 	model = "FriendlyElec NanoPi R2C | Plus";
 };
+
+&yt8521s {
+	/delete-property/ reset-assert-us;
+	/delete-property/ reset-deassert-us;
+	/delete-property/ reset-gpios;
+};
