@@ -36,12 +36,12 @@
 
 &combphy_pu {
 	rockchip,dis-u3otg0-port; /* disable USB3.0 */
-	status = "disabled";
+	status = "okay";
 };
 
 &pcie2x1 {
 	reset-gpios = <&gpio1 RK_PA2 GPIO_ACTIVE_HIGH>;
-	status = "disabled";
+	status = "okay";
 	pcie@0,0 {
 		reg = <0x000000 0 0 0 0>;
 		#address-cells = <3>;
