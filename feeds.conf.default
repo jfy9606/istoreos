@@ -9,3 +9,6 @@ src-git third https://github.com/jjm2473/openwrt-third.git;main
 # nas packages
 src-git nas https://github.com/linkease/nas-packages.git;master
 src-git nas_luci https://github.com/linkease/nas-packages-luci.git;main
+# other
+src-git easyluci https://github.com/EasyTier/luci-app-easytier.git
+
