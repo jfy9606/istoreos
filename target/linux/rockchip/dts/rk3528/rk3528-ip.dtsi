@@ -7,5 +7,6 @@
 
 };
 
-// #include "rk3528-vpu.dtsi"
+#include "rk3528-vpu.dtsi"
+#include "rk3528-gpu.dtsi"
 #include "rk3528-crypto.dtsi"
