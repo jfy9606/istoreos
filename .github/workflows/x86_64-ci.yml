@@ -1,0 +1,171 @@
+# 
+# <https://github.com/KFERMercer/OpenWrt-CI>
+#
+# Copyright (C) 2019 P3TERX
+#
+# Copyright (C) 2020 KFERMercer
+#
+name: x86_64-CI
+
+on:
+  #schedule:
+    #- cron: 0 20 * * *
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: "Git branch to build"
+        required: true
+        default: "main"
+        type: string
+      
+permissions:
+  contents: read
+
+jobs:
+
+  build_openwrt:
+
+    name: Build OpenWrt Firmware
+
+    runs-on: ubuntu-24.04
+
+    steps:
+
+      - name: Check Server Performance
+        run: |
+          echo -e "已知CPU型号（降序）：7763，8370C，8272CL，8171M，E5-2673 \n"
+          echo "--------------------------CPU信息--------------------------"
+          echo "CPU物理数量：$(cat /proc/cpuinfo | grep "physical id" | sort | uniq | wc -l)"
+          echo -e "CPU核心信息：$(cat /proc/cpuinfo | grep name | cut -f2 -d: | uniq -c) \n"
+          echo "--------------------------内存信息--------------------------"
+          echo "已安装内存详细信息："
+          echo -e "$(sudo lshw -short -C memory | grep GiB) \n"
+          echo "--------------------------硬盘信息--------------------------"
+          echo "硬盘数量：$(ls /dev/sd* | grep -v [1-9] | wc -l)" && df -hT
+    
+      - name: "Optimize Disk Space"
+        uses: "hugoalh/disk-space-optimizer-ghaction@v0.8.1"
+        with:
+         operate_sudo: "True"
+         general_include: ".+"
+         general_exclude: |-
+           ^GCC$
+           ^G\+\+$
+           Clang
+           LLVM
+         docker_include: ".+"
+         docker_prune: "True"
+         docker_clean: "True"
+         apt_prune: "True"
+         apt_clean: "True"
+         homebrew_prune: "True"
+         homebrew_clean: "True"
+         npm_prune: "True"
+         npm_clean: "True"
+         os_swap: "False"
+
+      - name: Freeing up disk space
+        uses: easimon/maximize-build-space@master
+        with: 
+          root-reserve-mb: 2048
+          swap-size-mb: 1024
+          remove-dotnet: 'true'
+          remove-android: 'true'
+          remove-haskell: 'true'
+          remove-codeql: 'true'
+          remove-docker-images: 'true'
+      
+      - name: Space cleanup and Initialization environment
+        env:
+           DEBIAN_FRONTEND: noninteractive
+        run: |
+           sudo -E rm -rf /usr/local/graalvm/ /usr/local/.ghcup/ /usr/local/share/powershell /usr/local/share/chromium /usr/local/lib/android /usr/local/lib/node_modules
+           sudo -E apt-mark hold grub-efi-amd64-signed $(dpkg --list | grep '^ii  linux-image' | awk '{print $2}')
+           sudo -E apt -qq update
+           sudo -E apt -qq -y purge azure-cli* '^llvm-.*' docker* google* powershell* snap*
+           sudo -E apt -qq -y full-upgrade
+           sudo -E apt -qq install -y ack antlr3 asciidoc autoconf automake autopoint binutils bison build-essential bzip2 ccache clang cmake cpio curl device-tree-compiler ecj fastjar flex gawk gettext gcc-multilib g++-multilib git gnutls-dev gperf haveged help2man intltool lib32gcc-s1 libc6-dev-i386 libelf-dev libglib2.0-dev libgmp3-dev libltdl-dev libmpc-dev libmpfr-dev libncurses-dev libpython3-dev libreadline-dev libssl-dev libtool libyaml-dev libz-dev lld llvm lrzsz mkisofs msmtp nano ninja-build p7zip p7zip-full patch pkgconf python3 python3-pip python3-ply python3-docutils python3-pyelftools qemu-utils re2c rsync scons squashfs-tools subversion swig texinfo uglifyjs upx-ucl unzip vim wget xmlto xxd zlib1g-dev zstd
+           sudo -E systemctl daemon-reload
+           sudo -E apt -qq -y autoremove --purge
+           sudo -E apt -qq autoclean
+           sudo -E timedatectl set-timezone "Asia/Shanghai"
+           sudo -E mkdir -p /home/runner/work/istoreos/istoreos/workdir
+           sudo -E chown -R $USER:$GROUPS /home/runner/work/istoreos/istoreos/workdir
+
+      #- name: Checkout OpenWrt
+      #  uses: actions/checkout@main
+      #  with:
+      #    fetch-depth: 0
+        
+      - name: Clone source code
+        working-directory: /home/runner/work/istoreos/istoreos/workdir
+        env:
+          REPO_URL: "https://github.com/jfy9606/istoreos/"
+          REPO_BRANCH: "main"
+        run: |
+          df -hT $PWD
+          git clone $REPO_URL -b $REPO_BRANCH openwrt
+          ln -sf /home/runner/work/istoreos/istoreos/workdir/openwrt $GITHUB_WORKSPACE/openwrt
+
+      - name: Enable build ccache
+        uses: stupidloud/cachewrtbuild@main
+        with:
+          ccache: 'true'
+          mixkey: 'x86'
+          prefix: ${{ github.workspace }}/openwrt
+      
+      - name: Update & Install feeds
+        run: |
+          /home/runner/work/istoreos/istoreos/workdir/openwrt/scripts/feeds update -a
+          /home/runner/work/istoreos/istoreos/workdir/openwrt/scripts/feeds install -a
+
+      - name: Generate and Compile Firmware for Each Configuration
+        run: |
+          cd /home/runner/work/istoreos/istoreos/workdir/openwrt
+          for config in .github/menuconfig/x86_64/menuconfig-*; do
+            CONFIG_NAME=$(basename $config)
+            echo "======================================="
+            echo "Building with configuration: $CONFIG_NAME"
+            echo "======================================="
+
+            cp -f "$config" .config
+            make defconfig
+            make download -j16
+            make -j$(nproc) || make -j1 || make -j1 V=s
+
+            echo "======================="
+            echo "Space usage after build ($CONFIG_NAME):"
+            echo "======================="
+            df -h
+            du -h --max-depth=1 ./ --exclude=build_dir --exclude=bin
+            du -h --max-depth=1 ./build_dir
+            du -h --max-depth=1 ./bin
+          done
+            ARTIFACT_DIR="./artifact"
+            mkdir -p "$ARTIFACT_DIR/firmware"
+            mkdir -p "$ARTIFACT_DIR/package"
+            mkdir -p "$ARTIFACT_DIR/buildinfo"
+            mv $(find ./bin/targets/ -type f) "$ARTIFACT_DIR/firmware/"
+            cp -r "$ARTIFACT_DIR/firmware/"*.ipk "$ARTIFACT_DIR/package/" && rm -f "$ARTIFACT_DIR/firmware/"*.ipk
+            mv ./bin/packages/* "$ARTIFACT_DIR/package/"
+
+      - name: Upload Firmware Artifacts
+        uses: actions/upload-artifact@main
+        with:
+          name: x86_64_firmware
+          path: /home/runner/work/istoreos/istoreos/workdir/openwrt/artifact/firmware
+          
+      - name: Upload Package Artifacts
+        uses: actions/upload-artifact@main
+        with:
+          name: x86_64_packages
+          path: /home/runner/work/istoreos/istoreos/workdir/openwrt/artifact/package
+
+      #- name: Upload release asset
+      #  if: github.event == 'release'
+      #  uses: svenstaro/upload-release-action@v4
+      #  with:
+      #    repo_token: ${{ secrets.YOURTOKEN }}
+      #    file: ./artifact/firmware/*
+      #    tag: ${{ github.ref }}
+      #    file_glob: true
