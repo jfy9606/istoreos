@@ -7,11 +7,9 @@ Subject: [PATCH] module: move btf_data back to original place
  include/linux/module.h | 8 ++++----
  1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/include/linux/module.h b/include/linux/module.h
-index 7480ea872..530aa296f 100644
 --- a/include/linux/module.h
 +++ b/include/linux/module.h
-@@ -491,6 +491,10 @@ struct module {
+@@ -493,6 +493,10 @@ struct module {
  	struct srcu_struct **srcu_struct_ptrs;
  #endif
  
@@ -22,7 +20,7 @@ index 7480ea872..530aa296f 100644
  #ifdef CONFIG_JUMP_LABEL
  	struct jump_entry *jump_entries;
  	unsigned int num_jump_entries;
-@@ -575,10 +579,6 @@ struct module {
+@@ -582,10 +586,6 @@ struct module {
  	unsigned int num_bpf_raw_events;
  	struct bpf_raw_event_map *bpf_raw_events;
  #endif
@@ -33,6 +31,3 @@ index 7480ea872..530aa296f 100644
  
  #ifdef CONFIG_KALLSYMS
  	/* Protected by RCU and/or module_mutex: use rcu_dereference() */
--- 
-2.46.0
-

@@ -17,7 +17,7 @@ Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 
 --- a/drivers/net/ethernet/stmicro/stmmac/dwmac-rk.c
 +++ b/drivers/net/ethernet/stmicro/stmmac/dwmac-rk.c
-@@ -1253,6 +1253,161 @@ static const struct rk_gmac_ops rk3568_o
+@@ -1249,6 +1249,161 @@ static const struct rk_gmac_ops rk3568_o
  	},
  };
  
@@ -179,7 +179,7 @@ Signed-off-by: Jakub Kicinski <kuba@kernel.org>
  /* sys_grf */
  #define RK3588_GRF_GMAC_CON7			0X031c
  #define RK3588_GRF_GMAC_CON8			0X0320
-@@ -2094,6 +2249,7 @@ static const struct of_device_id rk_gmac
+@@ -2046,6 +2201,7 @@ static const struct of_device_id rk_gmac
  	{ .compatible = "rockchip,rk3399-gmac", .data = &rk3399_ops },
  	{ .compatible = "rockchip,rk3528-gmac", .data = &rk3528_ops },
  	{ .compatible = "rockchip,rk3568-gmac", .data = &rk3568_ops },

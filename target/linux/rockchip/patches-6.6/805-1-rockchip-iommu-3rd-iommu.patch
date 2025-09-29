@@ -146,7 +146,7 @@ Signed-off-by: Simon Xue <xxm@rock-chips.com>
  	WARN_ON(!list_empty(&rk_domain->iommus));
  
  	for (i = 0; i < NUM_DT_ENTRIES; i++) {
-@@ -1293,6 +1339,7 @@ static const struct iommu_ops rk_iommu_o
+@@ -1292,6 +1338,7 @@ static const struct iommu_ops rk_iommu_o
  #endif
  	.pgsize_bitmap = RK_IOMMU_PGSIZE_BITMAP,
  	.of_xlate = rk_iommu_of_xlate,
@@ -154,7 +154,7 @@ Signed-off-by: Simon Xue <xxm@rock-chips.com>
  	.default_domain_ops = &(const struct iommu_domain_ops) {
  		.attach_dev	= rk_iommu_attach_device,
  		.map		= rk_iommu_map,
-@@ -1330,6 +1377,11 @@ static int rk_iommu_probe(struct platfor
+@@ -1331,6 +1378,11 @@ static int rk_iommu_probe(struct platfor
  	if (WARN_ON(rk_ops != ops))
  		return -EINVAL;
  
@@ -166,7 +166,7 @@ Signed-off-by: Simon Xue <xxm@rock-chips.com>
  	iommu->bases = devm_kcalloc(dev, num_res, sizeof(*iommu->bases),
  				    GFP_KERNEL);
  	if (!iommu->bases)
-@@ -1378,6 +1430,7 @@ static int rk_iommu_probe(struct platfor
+@@ -1379,6 +1431,7 @@ static int rk_iommu_probe(struct platfor
  	if (err)
  		return err;
  
@@ -174,7 +174,7 @@ Signed-off-by: Simon Xue <xxm@rock-chips.com>
  	iommu->group = iommu_group_alloc();
  	if (IS_ERR(iommu->group)) {
  		err = PTR_ERR(iommu->group);
-@@ -1400,6 +1453,9 @@ static int rk_iommu_probe(struct platfor
+@@ -1401,6 +1454,9 @@ static int rk_iommu_probe(struct platfor
  	if (!dma_dev)
  		dma_dev = &pdev->dev;
  
@@ -184,7 +184,7 @@ Signed-off-by: Simon Xue <xxm@rock-chips.com>
  	pm_runtime_enable(dev);
  
  	for (i = 0; i < iommu->num_irq; i++) {
-@@ -1416,6 +1472,13 @@ static int rk_iommu_probe(struct platfor
+@@ -1417,6 +1473,13 @@ static int rk_iommu_probe(struct platfor
  			goto err_pm_disable;
  	}
  
@@ -198,7 +198,7 @@ Signed-off-by: Simon Xue <xxm@rock-chips.com>
  	dma_set_mask_and_coherent(dev, rk_ops->dma_bit_mask);
  
  	return 0;
-@@ -1434,6 +1497,13 @@ static void rk_iommu_shutdown(struct pla
+@@ -1435,6 +1498,13 @@ static void rk_iommu_shutdown(struct pla
  {
  	struct rk_iommu *iommu = platform_get_drvdata(pdev);
  	int i;
@@ -212,7 +212,7 @@ Signed-off-by: Simon Xue <xxm@rock-chips.com>
  
  	for (i = 0; i < iommu->num_irq; i++) {
  		int irq = platform_get_irq(pdev, i);
-@@ -1447,10 +1517,15 @@ static void rk_iommu_shutdown(struct pla
+@@ -1448,10 +1518,15 @@ static void rk_iommu_shutdown(struct pla
  static int __maybe_unused rk_iommu_suspend(struct device *dev)
  {
  	struct rk_iommu *iommu = dev_get_drvdata(dev);
@@ -228,7 +228,7 @@ Signed-off-by: Simon Xue <xxm@rock-chips.com>
  	rk_iommu_disable(iommu);
  	return 0;
  }
-@@ -1458,10 +1533,15 @@ static int __maybe_unused rk_iommu_suspe
+@@ -1459,10 +1534,15 @@ static int __maybe_unused rk_iommu_suspe
  static int __maybe_unused rk_iommu_resume(struct device *dev)
  {
  	struct rk_iommu *iommu = dev_get_drvdata(dev);

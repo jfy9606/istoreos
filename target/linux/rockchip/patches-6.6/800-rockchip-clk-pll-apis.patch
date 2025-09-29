@@ -215,7 +215,7 @@ Subject: [PATCH] rockchip/clk: add rockchip_pll_clk api
  static int rockchip_rk3588_pll_enable(struct clk_hw *hw)
 --- a/drivers/clk/rockchip/clk.h
 +++ b/drivers/clk/rockchip/clk.h
-@@ -1129,6 +1129,9 @@ void rockchip_clk_register_armclk(struct
+@@ -1169,6 +1169,9 @@ void rockchip_clk_register_armclk(struct
  			const struct rockchip_cpuclk_reg_data *reg_data,
  			const struct rockchip_cpuclk_rate_table *rates,
  			int nrates);

@@ -103,7 +103,7 @@ Subject: [PATCH] rockchip-iommu: export APIs
  static int rk_iommu_identity_attach(struct iommu_domain *identity_domain,
  				    struct device *dev)
  {
-@@ -1185,6 +1252,37 @@ static int rk_iommu_of_xlate(struct devi
+@@ -1184,6 +1251,37 @@ static int rk_iommu_of_xlate(struct devi
  	return 0;
  }
  

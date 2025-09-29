@@ -37,7 +37,7 @@ Subject: [PATCH] 100-add-LED-configuration-from-OF
  #include <linux/if_vlan.h>
  #include <linux/crc32.h>
  #include <linux/interrupt.h>
-@@ -14767,6 +14768,56 @@ rtl8125_restore_phy_fuse_dout(struct rtl
+@@ -14760,6 +14761,56 @@ rtl8125_restore_phy_fuse_dout(struct rtl
                  return;
  }
  
@@ -94,7 +94,7 @@ Subject: [PATCH] 100-add-LED-configuration-from-OF
  static void
  rtl8125_init_software_variable(struct net_device *dev)
  {
-@@ -15269,6 +15320,8 @@ rtl8125_init_software_variable(struct ne
+@@ -15276,6 +15327,8 @@ rtl8125_init_software_variable(struct ne
          else if (tp->InitRxDescType == RX_DESC_RING_TYPE_4)
                  tp->rtl8125_rx_config &= ~EnableRxDescV4_1;
  

@@ -54,7 +54,7 @@ Subject: [PATCH] drivers/dwmac-rk: supports rockchip dwmac tool
  struct rk_priv_data;
  struct rk_gmac_ops {
  	void (*set_to_rgmii)(struct rk_priv_data *bsp_priv,
-@@ -1938,6 +1942,39 @@ static void rk_fix_speed(void *priv, uns
+@@ -2093,6 +2097,39 @@ static void rk_fix_speed(void *priv, uns
  	}
  }
  
@@ -94,7 +94,7 @@ Subject: [PATCH] drivers/dwmac-rk: supports rockchip dwmac tool
  static int rk_gmac_probe(struct platform_device *pdev)
  {
  	struct plat_stmmacenet_data *plat_dat;
-@@ -1984,6 +2021,12 @@ static int rk_gmac_probe(struct platform
+@@ -2139,6 +2176,12 @@ static int rk_gmac_probe(struct platform
  	if (ret)
  		goto err_gmac_powerdown;
  
@@ -107,7 +107,7 @@ Subject: [PATCH] drivers/dwmac-rk: supports rockchip dwmac tool
  	return 0;
  
  err_gmac_powerdown:
-@@ -2001,6 +2044,9 @@ static void rk_gmac_remove(struct platfo
+@@ -2156,6 +2199,9 @@ static void rk_gmac_remove(struct platfo
  	stmmac_dvr_remove(&pdev->dev);
  
  	rk_gmac_powerdown(bsp_priv);

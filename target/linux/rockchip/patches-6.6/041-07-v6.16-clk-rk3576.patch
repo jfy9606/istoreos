@@ -27,17 +27,17 @@ Signed-off-by: Heiko Stuebner <heiko@sntech.de>
 
 --- a/drivers/clk/rockchip/Makefile
 +++ b/drivers/clk/rockchip/Makefile
-@@ -13,6 +13,7 @@ clk-rockchip-y += clk-inverter.o
- clk-rockchip-y += clk-mmc-phase.o
+@@ -14,6 +14,7 @@ clk-rockchip-y += clk-mmc-phase.o
  clk-rockchip-y += clk-muxgrf.o
  clk-rockchip-y += clk-ddr.o
+ clk-rockchip-y += gate-link.o
 +clk-rockchip-y += gate-grf.o
  clk-rockchip-$(CONFIG_RESET_CONTROLLER) += softrst.o
  
  obj-$(CONFIG_CLK_PX30)          += clk-px30.o
 --- a/drivers/clk/rockchip/clk.c
 +++ b/drivers/clk/rockchip/clk.c
-@@ -463,7 +463,9 @@ void rockchip_clk_register_branches(stru
+@@ -509,7 +509,9 @@ void rockchip_clk_register_branches(stru
  		clk = NULL;
  
  		/* for GRF-dependent branches, choose the right grf first */
@@ -48,7 +48,7 @@ Signed-off-by: Heiko Stuebner <heiko@sntech.de>
  				list->grf_type != grf_type_sys) {
  			hash_for_each_possible(ctx->aux_grf_table, agrf, node, list->grf_type) {
  				if (agrf->type == list->grf_type) {
-@@ -542,6 +544,13 @@ void rockchip_clk_register_branches(stru
+@@ -588,6 +590,13 @@ void rockchip_clk_register_branches(stru
  				ctx->reg_base + list->gate_offset,
  				list->gate_shift, list->gate_flags, &ctx->lock);
  			break;
@@ -76,15 +76,15 @@ Signed-off-by: Heiko Stuebner <heiko@sntech.de>
  #define PNAME(x) static const char *const x[] __initconst
  
  enum rockchip_clk_branch_type {
-@@ -572,6 +577,7 @@ enum rockchip_clk_branch_type {
- 	branch_divider,
+@@ -573,6 +578,7 @@ enum rockchip_clk_branch_type {
  	branch_fraction_divider,
  	branch_gate,
+ 	branch_linked_gate,
 +	branch_grf_gate,
  	branch_mmc,
  	branch_grf_mmc,
  	branch_inverter,
-@@ -900,6 +906,20 @@ struct rockchip_clk_branch {
+@@ -916,6 +922,20 @@ struct rockchip_clk_branch {
  		.gate_flags	= gf,				\
  	}
  

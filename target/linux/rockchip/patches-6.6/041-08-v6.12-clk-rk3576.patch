@@ -47,7 +47,7 @@ Signed-off-by: Heiko Stuebner <heiko@sntech.de>
  	depends on ARM64 || COMPILE_TEST
 --- a/drivers/clk/rockchip/Makefile
 +++ b/drivers/clk/rockchip/Makefile
-@@ -30,4 +30,5 @@ obj-$(CONFIG_CLK_RK3368)        += clk-r
+@@ -31,4 +31,5 @@ obj-$(CONFIG_CLK_RK3368)        += clk-r
  obj-$(CONFIG_CLK_RK3399)        += clk-rk3399.o
  obj-$(CONFIG_CLK_RK3528)	+= clk-rk3528.o rst-rk3528.o
  obj-$(CONFIG_CLK_RK3568)	+= clk-rk3568.o
@@ -114,7 +114,7 @@ Signed-off-by: Heiko Stuebner <heiko@sntech.de>
  #define RK3588_PHP_CRU_BASE		0x8000
  #define RK3588_PMU_CRU_BASE		0x30000
  #define RK3588_BIGCORE0_CRU_BASE	0x50000
-@@ -1116,6 +1168,7 @@ static inline void rockchip_register_sof
+@@ -1156,6 +1208,7 @@ static inline void rockchip_register_sof
  }
  
  void rk3528_rst_init(struct device_node *np, void __iomem *reg_base);

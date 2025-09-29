@@ -13,7 +13,7 @@ Signed-off-by: Liangbin Lian <jjm2473@gmail.com>
 
 --- a/drivers/leds/trigger/ledtrig-netdev.c
 +++ b/drivers/leds/trigger/ledtrig-netdev.c
-@@ -212,7 +212,7 @@ static void get_device_state(struct led_
+@@ -207,7 +207,7 @@ static void get_device_state(struct led_
  {
  	struct ethtool_link_ksettings cmd;
  

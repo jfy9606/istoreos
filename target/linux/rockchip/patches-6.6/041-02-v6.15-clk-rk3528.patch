@@ -20,7 +20,7 @@ Signed-off-by: Heiko Stuebner <heiko@sntech.de>
 
 --- a/drivers/clk/rockchip/Makefile
 +++ b/drivers/clk/rockchip/Makefile
-@@ -27,6 +27,6 @@ obj-$(CONFIG_CLK_RK3308)        += clk-r
+@@ -28,6 +28,6 @@ obj-$(CONFIG_CLK_RK3308)        += clk-r
  obj-$(CONFIG_CLK_RK3328)        += clk-rk3328.o
  obj-$(CONFIG_CLK_RK3368)        += clk-rk3368.o
  obj-$(CONFIG_CLK_RK3399)        += clk-rk3399.o
@@ -30,7 +30,7 @@ Signed-off-by: Heiko Stuebner <heiko@sntech.de>
  obj-$(CONFIG_CLK_RK3588)	+= clk-rk3588.o rst-rk3588.o
 --- a/drivers/clk/rockchip/clk.h
 +++ b/drivers/clk/rockchip/clk.h
-@@ -1046,6 +1046,7 @@ static inline void rockchip_register_sof
+@@ -1086,6 +1086,7 @@ static inline void rockchip_register_sof
  	return rockchip_register_softrst_lut(np, NULL, num_regs, base, flags);
  }
  

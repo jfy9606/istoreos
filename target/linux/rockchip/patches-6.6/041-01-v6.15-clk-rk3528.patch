@@ -35,7 +35,7 @@ Signed-off-by: Heiko Stuebner <heiko@sntech.de>
  	depends on ARM64 || COMPILE_TEST
 --- a/drivers/clk/rockchip/Makefile
 +++ b/drivers/clk/rockchip/Makefile
-@@ -27,5 +27,6 @@ obj-$(CONFIG_CLK_RK3308)        += clk-r
+@@ -28,5 +28,6 @@ obj-$(CONFIG_CLK_RK3308)        += clk-r
  obj-$(CONFIG_CLK_RK3328)        += clk-rk3328.o
  obj-$(CONFIG_CLK_RK3368)        += clk-rk3368.o
  obj-$(CONFIG_CLK_RK3399)        += clk-rk3399.o
