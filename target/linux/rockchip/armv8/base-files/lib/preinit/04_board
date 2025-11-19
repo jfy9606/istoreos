@@ -40,4 +40,14 @@ preinit_gpio() {
 	esac
 }
 
+preinit_rebind_drivers() {
+	case $(board_name) in
+	radxa,e24c)
+		# rebind e24c hym8563 if previously bound failed
+		[ -e /sys/bus/i2c/drivers/rtc-hym8563/3-0051 ] || { echo "3-0051" > /sys/bus/i2c/drivers/rtc-hym8563/bind; }
+	;;
+	esac
+}
+
 boot_hook_add preinit_main preinit_gpio
+boot_hook_add preinit_main preinit_rebind_drivers
