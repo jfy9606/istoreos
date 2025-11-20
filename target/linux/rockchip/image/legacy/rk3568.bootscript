@@ -1,6 +1,4 @@
-if test -z "${devtype}"; then
-	setenv devtype mmc
-fi
+test -n "${devtype}" || setenv devtype mmc
 
 part uuid ${devtype} ${devnum}:2 uuid
 
