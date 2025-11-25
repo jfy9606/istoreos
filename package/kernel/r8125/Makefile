@@ -2,7 +2,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=r8125
 PKG_VERSION:=9.016.01
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=https://github.com/openwrt/rtl8125/releases/download/$(PKG_VERSION)
@@ -31,7 +31,7 @@ define KernelPackage/r8125/install/dkml
 	$(LN) ../modules.d/$(filter-out 0-,$(word 1,$(AUTOLOAD))-)$$(NAME) $(1)/etc/modules-pending.d/$$(NAME)
 endef
 
-ifeq ($(CONFIG_TARGET_x86),y)
+ifneq ($(filter y,$(CONFIG_TARGET_x86) $(CONFIG_TARGET_rockchip)),)
 KernelPackage/r8125/install = $(KernelPackage/r8125/install/dkml)
 endif
 
