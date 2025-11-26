@@ -299,10 +299,12 @@
 };
 
 /* USB */
+// for usb 3.0 host
 &combphy2_psu {
 	status = "okay";
 };
 
+// for type-c port
 &u2phy0 {
 	status = "okay";
 };
@@ -312,11 +314,13 @@
 	status = "okay";
 };
 
+// for usb 2.0 host 1
 &u2phy2_host {
 	status = "okay";
 	phy-supply = <&vcc5v0_usb_hub>;
 };
 
+// for usb 2.0 host 2 => usb3.0 port
 &u2phy3_host {
 	status = "okay";
 	phy-supply = <&vcc5v0_usb3_host>;
@@ -330,6 +334,7 @@
 	status = "okay";
 };
 
+// usb 2.0 host 1 => usb hub => usb 2.0 x 2
 &usb_host0_ehci {
 	status = "okay";
 };
@@ -338,23 +343,28 @@
 	status = "okay";
 };
 
+// type-c port
 &usb_host0_xhci {
-	extcon = <&u2phy0>;
-//	dr_mode = "host";
+	dr_mode = "peripheral";
 	status = "okay";
-	phys = <&u2phy0_otg>;
-	phy-names = "usb2-phy";
 };
 
+// for type-c port
 &usbdp_phy0 {
 	status = "okay";
 };
 
+// usb 2.0 host 2 for usb 3.0 port
 &usb_host1_ehci {
 	status = "okay";
 };
 
 &usb_host1_ohci {
+	status = "okay";
+};
+
+// usb 3.0 host for usb 3.0 port
+&usb_host2_xhci {
 	status = "okay";
 };
 
@@ -529,11 +539,7 @@
 // 	pinctrl-0 = <&i2c8m4_xfer>;
 // };
 
-&i2c5 {
-	status = "okay";
-	pinctrl-names = "default";
-	pinctrl-0 = <&i2c5m2_xfer>;
-
+&i2c4 {
 	usbc0: fusb302@22 {
 		compatible = "fcs,fusb302";
 		reg = <0x22>;
