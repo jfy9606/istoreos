@@ -60,3 +60,6 @@ msgstr "历史更新日志"
 
 msgid "Found downloading firmware, will show progress"
 msgstr "发现下载中的固件，将显示当前进度"
+
+msgid "Use IPv4 network for OTA operations"
+msgstr "使用 IPv4 连接 OTA 服务器"

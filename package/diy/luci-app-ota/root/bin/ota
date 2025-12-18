@@ -35,7 +35,14 @@ sha256() {
     sha256sum $1 | cut -d' ' -f1
 }
 
-alias fcurl='curl -L --fail --show-error'
+OTA_CURL_OPTS=""
+case $action in
+    "check"|"download")
+        [ "`uci -q get ota.network.ipv4`" = 1 ] && OTA_CURL_OPTS="--ipv4"
+    ;;
+esac
+alias fcurl="curl $OTA_CURL_OPTS -L --fail --show-error"
+unset OTA_CURL_OPTS
 
 download() {
     local img=$1
