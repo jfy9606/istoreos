@@ -116,11 +116,16 @@ lock_download() {
 }
 
 prepare_check() {
+    local latest=0
+    if find /var/run/ota/check.status -mmin -5 2>/dev/null | grep -q . ; then
+        latest=`cat /var/run/ota/check.status`
+        return $latest
+    fi
     local line
     local release=`grep 'DISTRIB_RELEASE=' /etc/openwrt_release | sed -E "s/.*'(.+)'.*/\1/"`
     local revision=`grep 'DISTRIB_REVISION=' /etc/openwrt_release | sed -E "s/.*'(.+)'.*/\1/" | cut -d'-' -f1`
     local current="$release-$revision"
-    local latest=0
+
     cat /dev/null > /var/run/ota/ota.log
     fcurl --connect-timeout 5 -o /var/run/ota/ota.latest "$OTA_URL_BASE/version.latest" || { rm -f /var/run/ota/ota.latest ; return 255; }
     if head -1 /var/run/ota/ota.latest | grep -Fq "$current"; then
@@ -139,6 +144,7 @@ prepare_check() {
     [ "`wc -l /var/run/ota/ota.log | cut -d' ' -f1`" -eq 0 ] && return 1
     [ "`wc -l /var/run/ota/ota.index | cut -d' ' -f1`" -gt 5 ] && echo "<a href=\"$OTA_URL_BASE/\" onclick=\"void(0)\" target=\"_blank\">More</a>" >> /var/run/ota/ota.log
     fcurl --connect-timeout 1 "$OTA_URL_BASE/ota.footer.html" >> /var/run/ota/ota.log 2>/dev/null
+    echo "$latest" >/var/run/ota/check.status
     return $latest
 }
 
