@@ -60,3 +60,6 @@ msgstr ""
 
 msgid "Found downloading firmware, will show progress"
 msgstr ""
+
+msgid "Use IPv4 network for OTA operations"
+msgstr ""
