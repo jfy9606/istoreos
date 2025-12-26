@@ -9,18 +9,20 @@
 		<title><%=luci.sys.hostname()%> - <%= title or translate("Rebooting...") %></title>
 		<link rel="stylesheet" type="text/css" media="screen" href="<%=media%>/cascade.css" />
 		<script type="text/javascript">//<![CDATA[
-			var interval = window.setInterval(function() {
-				var img = new Image();
-				var target = ('https:' == document.location.protocol ? 'https://' : 'http://') + <%=addr and "'%s'" % addr or "window.location.host"%>;
+			window.setTimeout(function() {
+				var interval = window.setInterval(function() {
+					var img = new Image();
+					var target = ('https:' == document.location.protocol ? 'https://' : 'http://') + <%=addr and "'%s'" % addr or "window.location.host"%>;
 
-				img.onload = function() {
-					window.clearInterval(interval);
-					window.location.replace(target);
-				};
+					img.onload = function() {
+						window.clearInterval(interval);
+						window.location.replace(target);
+					};
 
-				img.src = target + '<%=resource%>/icons/loading.svg?' + Math.random();
+					img.src = target + '<%=resource%>/icons/loading.svg?' + Math.random();
 
-			}, 5000);
+				}, 5000);
+			}, 10000);
 		//]]></script>
 	</head>
 	<body>
