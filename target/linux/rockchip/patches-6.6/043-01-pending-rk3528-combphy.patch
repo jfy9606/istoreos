@@ -17,7 +17,7 @@ Subject: [PATCH] phy/rockchip-naneng-combphy: supports rk3528
  	struct combphy_reg pipe_clk_25m;
  	struct combphy_reg pipe_clk_100m;
  	struct combphy_reg pipe_phymode_sel;
-@@ -381,6 +382,107 @@ static int rockchip_combphy_probe(struct
+@@ -383,6 +384,107 @@ static int rockchip_combphy_probe(struct
  	return PTR_ERR_OR_ZERO(phy_provider);
  }
  
@@ -125,7 +125,7 @@ Subject: [PATCH] phy/rockchip-naneng-combphy: supports rk3528
  static int rk3568_combphy_cfg(struct rockchip_combphy_priv *priv)
  {
  	const struct rockchip_combphy_grfcfg *cfg = priv->cfg->grfcfg;
-@@ -775,6 +877,10 @@ static const struct rockchip_combphy_cfg
+@@ -787,6 +889,10 @@ static const struct rockchip_combphy_cfg
  
  static const struct of_device_id rockchip_combphy_of_match[] = {
  	{
