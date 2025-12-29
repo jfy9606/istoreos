@@ -26,9 +26,11 @@ if [ -n "$AUTOIPV6" ]; then
 	[ -n "$ZONE" ] && json_add_string zone "$ZONE"
 	[ -n "$EXTENDPREFIX" ] && json_add_string extendprefix 1
 	[ -n "$IP6TABLE" ] && json_add_string ip6table $IP6TABLE
+	[ -n "$REQPREFIX" ] && json_add_string reqprefix $REQPREFIX
 	[ -n "$PEERDNS" ] && json_add_boolean peerdns $PEERDNS
 	[ "$NOSOURCEFILTER" = "1" ] && json_add_boolean sourcefilter "0"
 	[ "$DELEGATE" = "0" ] && json_add_boolean delegate "0"
+	[ -n "$NORELEASE" ] && json_add_boolean norelease "1"
 	[ -n "$IFACE_DSLITE" ] && json_add_string iface_dslite $IFACE_DSLITE
 	[ -n "$IFACE_MAP" ] && json_add_string iface_map $IFACE_MAP
 	[ -n "$IFACE_464XLAT" ] && json_add_string iface_464xlat $IFACE_464XLAT
