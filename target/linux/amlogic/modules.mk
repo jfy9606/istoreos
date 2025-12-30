@@ -16,7 +16,7 @@ define KernelPackage/drm-amlogic-meson
 	$(LINUX_DIR)/drivers/gpu/drm/bridge/synopsys/dw-hdmi.ko \
 	$(LINUX_DIR)/drivers/gpu/drm/bridge/synopsys/dw-hdmi-cec.ko \
 	$(LINUX_DIR)/drivers/media/cec/core/cec.ko
-  AUTOLOAD:=$(call AutoLoad,80,dw-hdmi-cec meson-drm)
+  AUTOLOAD:=$(call AutoLoad,80,dw-hdmi-cec meson-drm display-connector)
 endef
 
 define KernelPackage/drm-amlogic-meson/description
