@@ -240,6 +240,7 @@ board_set_iface_smp_affinity() {
 		fi
 		;;
 	easepi,r1|easepi,r1-lite|\
+	linkease,easepi-r1|\
 	roceos,k40pro|\
 	roceos,k50s|\
 	lyt,t68m|\

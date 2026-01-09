@@ -67,7 +67,7 @@ Signed-off-by: Vinod Koul <vkoul@kernel.org>
  
  struct rockchip_combphy_priv;
  
-@@ -689,6 +703,266 @@ static const struct rockchip_combphy_cfg
+@@ -701,6 +715,266 @@ static const struct rockchip_combphy_cfg
  	.combphy_cfg	= rk3568_combphy_cfg,
  };
  
@@ -334,7 +334,7 @@ Signed-off-by: Vinod Koul <vkoul@kernel.org>
  static int rk3588_combphy_cfg(struct rockchip_combphy_priv *priv)
  {
  	const struct rockchip_combphy_grfcfg *cfg = priv->cfg->grfcfg;
-@@ -885,6 +1159,10 @@ static const struct of_device_id rockchi
+@@ -897,6 +1171,10 @@ static const struct of_device_id rockchi
  		.data = &rk3568_combphy_cfgs,
  	},
  	{
