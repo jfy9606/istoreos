@@ -82,7 +82,7 @@ $(call Device/Legacy/rk3568,$(1))
   DEVICE_VENDOR := EasePi
   DEVICE_MODEL := A2
   DEVICE_DTS := rk3568/rk3568-easepi-a2
-  DEVICE_PACKAGES += kmod-r8169 kmod-nvme kmod-brcmfmac cypress-firmware-43455-sdio brcmfmac-nvram-43455-sdio-generic
+  DEVICE_PACKAGES += kmod-r8169 kmod-nvme kmod-brcmfmac brcmfmac-firmware-43455-sdio brcmfmac-nvram-43455-sdio-generic
 endef
 TARGET_DEVICES += easepi_a2
 
@@ -108,7 +108,7 @@ define Device/easepi_ars4
 $(call Device/Legacy/rk3568,$(1))
   DEVICE_VENDOR := EasePi
   DEVICE_MODEL := ARS4
-  DEVICE_PACKAGES += kmod-r8169 kmod-ata-ahci-dwc kmod-hwmon-pwmfan kmod-thermal
+  DEVICE_PACKAGES += kmod-r8169 kmod-ata-ahci-dwc kmod-hwmon-pwmfan kmod-thermal kmod-aic8800s
 endef
 TARGET_DEVICES += easepi_ars4
 
@@ -299,6 +299,14 @@ $(call Device/Legacy/rk3588,$(1))
   DEVICE_PACKAGES += kmod-r8169 kmod-nvme kmod-ata-ahci-dwc kmod-hwmon-pwmfan kmod-thermal kmod-rkwifi-bcmdhd-pcie rkwifi-firmware-ap6275p
 endef
 TARGET_DEVICES += xunlong_orangepi-5-plus
+
+define Device/radxa_rock-5t
+$(call Device/Legacy/rk3588,$(1))
+  DEVICE_VENDOR := Radxa 
+  DEVICE_MODEL := ROCK 5T
+  DEVICE_PACKAGES += kmod-r8169 kmod-nvme kmod-ata-ahci-dwc kmod-hwmon-pwmfan kmod-thermal
+endef
+TARGET_DEVICES += radxa_rock-5t
 
 define Device/cyber_cyber3588-aib
 $(call Device/Legacy/rk3588,$(1))
