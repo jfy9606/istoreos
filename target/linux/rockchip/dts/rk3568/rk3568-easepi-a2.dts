@@ -1,6 +1,8 @@
 /dts-v1/;
 
 #include "rk3568-roc-k40pro.dtsi"
+#include "rk3568-ip.dtsi"
+#include "rk3568-ip-rk809.dtsi"
 
 / {
 	compatible = "easepi,a2", "rockchip,rk3568";
