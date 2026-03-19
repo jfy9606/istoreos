@@ -15,6 +15,7 @@
 	aliases {
 		ethernet0 = &pcie_eth0;
 		/delete-property/ ethernet1;
+		mmc2 = &sdmmc2;
 	};
 
 	chosen {

@@ -22,6 +22,7 @@
 	aliases {
 		ethernet2 = &pcie_eth2;
 		ethernet3 = &pcie_eth3;
+		mmc2 = &sdmmc2;
 	};
 
 	pwr-net-25g {
