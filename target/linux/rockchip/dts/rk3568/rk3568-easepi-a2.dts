@@ -1,6 +1,8 @@
 /dts-v1/;
 
 #include "rk3568-roc-k40pro.dtsi"
+#include "rk3568-ip.dtsi"
+#include "rk3568-ip-rk809.dtsi"
 
 / {
 	compatible = "easepi,a2", "rockchip,rk3568";
@@ -13,6 +15,7 @@
 	aliases {
 		ethernet0 = &pcie_eth0;
 		/delete-property/ ethernet1;
+		mmc2 = &sdmmc2;
 	};
 
 	chosen {
@@ -141,8 +144,6 @@
 
 &led_green {
 	gpios = <&gpio3 RK_PA3 GPIO_ACTIVE_HIGH>;
-	label = "power-key";
-	linux,default-trigger = "heartbeat";
 };
 
 &led_green_en {
