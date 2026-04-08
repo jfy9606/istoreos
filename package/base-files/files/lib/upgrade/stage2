@@ -187,6 +187,9 @@ fi
 
 indicate_upgrade
 
+# hide icons/loading.svg, so frontend thinks we're offline
+[ -f /www/luci-static/resources/icons/loading.svg ] && mount --bind /dev/full /www/luci-static/resources/icons/loading.svg
+
 while read -r a b c; do
 	case "$a" in
 		MemT*) mem="$b" ;; esac
@@ -214,6 +217,9 @@ kill_remaining KILL 1
 
 sleep 6
 
+# web server stopped now, we can safely unmount the loading icon
+umount /www/luci-static/resources/icons/loading.svg 2>/dev/null
+
 echo 3 > /proc/sys/vm/drop_caches
 
 [ -n "$IMAGE" ] && istoreos_pre_upgrade
@@ -224,6 +230,8 @@ fi
 
 ROOTFS_TYPE=$(rootfs_type)
 if [ -n "$ROOTFS_TYPE" -a "$ROOTFS_TYPE" != "tmpfs" -a "$ROOTFS_TYPE" != "rootfs" ]; then
+	date '+%Y-%m-%d %H:%M:%S' >>/overlay/upgrade.log
+
 	v "Switching to ramdisk..."
 	switch_to_ramfs
 fi
