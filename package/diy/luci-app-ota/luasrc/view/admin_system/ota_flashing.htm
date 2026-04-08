@@ -10,19 +10,21 @@
 		<link rel="stylesheet" type="text/css" media="screen" href="<%=media%>/cascade.css" />
 		<script type="text/javascript">//<![CDATA[
 			window.setTimeout(function() {
+				var nonce = new Date().getTime();
+				var target = ('https:' == document.location.protocol ? 'https://' : 'http://') + <%=addr and "'%s'" % addr or "window.location.host"%>;
+				var src = target + '<%=resource%>/icons/loading.svg?' + nonce;
 				var interval = window.setInterval(function() {
 					var img = new Image();
-					var target = ('https:' == document.location.protocol ? 'https://' : 'http://') + <%=addr and "'%s'" % addr or "window.location.host"%>;
 
 					img.onload = function() {
 						window.clearInterval(interval);
 						window.location.replace(target);
 					};
 
-					img.src = target + '<%=resource%>/icons/loading.svg?' + Math.random();
+					img.src = src;
 
 				}, 5000);
-			}, 10000);
+			}, 15000);
 		//]]></script>
 	</head>
 	<body>
